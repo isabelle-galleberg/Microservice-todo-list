@@ -17,7 +17,7 @@
     # To operate remotely in critical files without direct user input
     - name: Remove require tty - alt
       lineinfile:
-        regexp: "requiretty"
+        regexp: 'requiretty'
         dest: /etc/sudoers.d/os_defaults
         state: absent
     # Giving permissions in sudoers for system critical files (see https://docs.ansible.com/ansible/latest/modules/lineinfile_module.html)
@@ -56,9 +56,8 @@
 
     - name: deploy website content
       template:
-        src: /home/vagrant/labs/gcpcloud/templates/index.html.j2
+        src: /home/vagrant/labs/agisit23-g16/gcpcloud/templates/index.html.j2
         dest: /var/www/html/index.html
-
 
   # The handler is common to the nginx installation steps
   handlers:
@@ -80,7 +79,7 @@
       lineinfile:
         dest: /etc/hosts
         regexp: '.*{{ item }}$'
-        line: "127.0.0.1 {{item}}"
+        line: '127.0.0.1 {{item}}'
         state: present
       with_items: balancer
     # as there is no internal DNS service, we need to populate the /etc/hosts
@@ -106,14 +105,13 @@
     - name: enable haproxy
       lineinfile:
         path: /etc/default/haproxy
-        regexp: "^ENABLED.+$"
-        line: "ENABLED=1"
+        regexp: '^ENABLED.+$'
+        line: 'ENABLED=1'
         state: present
-
 
     - name: deploy haproxy config
       template:
-        src: /home/vagrant/labs/gcpcloud/templates/haproxy.cfg.j2
+        src: /home/vagrant/labs/agisit23-g16/gcpcloud/templates/haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
         mode: 0644
         validate: haproxy -f %s -c -q
@@ -125,10 +123,9 @@
         state: started
         enabled: yes
 
-# The handler is common to the nginx installation steps
+  # The handler is common to the nginx installation steps
   handlers:
-
-  - name: restart haproxy
-    service:
-      name: haproxy
-      state: restarted
+    - name: restart haproxy
+      service:
+        name: haproxy
+        state: restarted
