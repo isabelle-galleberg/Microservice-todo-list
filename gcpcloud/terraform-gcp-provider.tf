@@ -3,7 +3,7 @@
 # check how configure the provider here:
 # https://www.terraform.io/docs/providers/google/index.html
 provider "google" {
-    credentials = file("agisit-2223-website-XXXXXXX.json")
+    credentials = file("agisit-2223-website-16-c2a38c70de7c.json")
     project = var.GCP_PROJECT_ID
     zone = var.GCP_ZONE
 }
