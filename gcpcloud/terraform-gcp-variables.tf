@@ -21,7 +21,7 @@ variable "GCP_MACHINE_TYPE" {
 # For prices of your deployment check:
 # Compute Engine dashboard -> VM instances -> Zone
 variable "GCP_ZONE" {
-    default = "europe-west3-c"
+    default = "europe-west4-c"
 }
 
 # Minimum required
