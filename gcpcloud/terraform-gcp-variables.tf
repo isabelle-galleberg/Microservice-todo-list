@@ -4,7 +4,7 @@
 # ID of the project, find it in the GCP console when clicking 
 # on the project name (on the top dropdown)
 variable "GCP_PROJECT_ID" {
-    default = "AGISIT-2324-website-16"
+    default = "agisit-2324-website-16"
 }
 
 # A list of machine types is found at:
@@ -21,7 +21,7 @@ variable "GCP_MACHINE_TYPE" {
 # For prices of your deployment check:
 # Compute Engine dashboard -> VM instances -> Zone
 variable "GCP_ZONE" {
-    default = "europe-west4-c"
+    default = "europe-west4-b"
 }
 
 # Minimum required
