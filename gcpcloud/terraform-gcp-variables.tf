@@ -4,7 +4,7 @@
 # ID of the project, find it in the GCP console when clicking 
 # on the project name (on the top dropdown)
 variable "GCP_PROJECT_ID" {
-    default = "AGISIT-2223-website-XXXXX-7657685"
+    default = "AGISIT-2324-website-16"
 }
 
 # A list of machine types is found at:
