@@ -1,2 +1,3 @@
-vagrantfile
-vagrantfile.*
+Vagrantfile
+Vagrantfile.docker
+Vagrantfile.vbox
