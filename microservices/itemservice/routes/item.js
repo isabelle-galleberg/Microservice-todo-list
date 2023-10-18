@@ -18,7 +18,7 @@ router.get('/health', (req, res) => {
     res.end();
 });
 
-// Check an item
+// Check an item //!NB these expect an id param in URL to update item status
 router.put('/check/:id', (req, res) => {
     const itemId = req.params.id;
     updateItemStatus(itemId, true);
@@ -36,10 +36,10 @@ router.put('/uncheck/:id', (req, res) => {
 function updateItemStatus(itemId, status) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        const dbo = db.db("todo");
+        const dbo = db.db("todo"); //TODO change to correct name once db has name
         const query = { _id: itemId };
         const newValues = { $set: { checked: status } };
-        dbo.collection("list").updateOne(query, newValues, function (err, res) {
+        dbo.collection("list").updateOne(query, newValues, function (err) {
             if (err) throw err;
             console.log("1 item updated");
             db.close();
