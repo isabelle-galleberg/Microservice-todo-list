@@ -4,13 +4,13 @@ const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs")
 
 // Get database connection string
-function getConnectionString() {
+function getMondoDBurl() {
     const data = fs.readFileSync('database_ips', 'utf8'); //! Requires the file database_ips to be set up with ips of our mongodb servers
     const ips = data.split('\n').filter((ip) => ip !== "").map(ip => ip.trim());
     return `mongodb://${ips.join(",")}/?replicaSet=rs0`; // replica set the MongoDB connection string can connect to 
 }
 
-const url = getConnectionString();
+const url = getMondoDBurl();
 
 
 // Health check endpoint, checking that service is up
@@ -36,7 +36,7 @@ router.put('/uncheck/:id', (req, res) => {
 function updateItemStatus(itemId, status) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        const dbo = db.db("todo"); //TODO change to correct name once db has name
+        const dbo = db.db("todo");
         const query = { _id: itemId };
         const newValues = { $set: { checked: status } };
         dbo.collection("list").updateOne(query, newValues, function (err) {
