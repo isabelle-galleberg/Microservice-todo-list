@@ -28,7 +28,7 @@ router.post('/add', (req, res) => {
 });
 
 // Remove a todo list item
-router.delete('/remove/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const itemId = req.params.id;
     removeFromDB(itemId);
     res.status(204).json({ status: "Item removed" }); // Return a 204 status code for a successful DELETE

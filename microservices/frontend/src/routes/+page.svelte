@@ -39,7 +39,7 @@
 
   async function addTodo() {
     try {
-      const response = await axios.post(list_url, {
+      const response = await axios.post(`${list_url}/add`, {
         text: newTodo,
         completed: false,
       });
