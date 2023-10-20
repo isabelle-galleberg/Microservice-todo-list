@@ -38,11 +38,11 @@ Vagrant.configure("2") do |config|
     # Shared folders
     if Vagrant::Util::Platform.windows? then
       # Configuration SPECIFIC for Windows 10 hosts
-      mgvb.vm.synced_folder "../", "/home/vagrant/labs",
+      mgvb.vm.synced_folder "./", "/home/vagrant/project",
         owner: "vagrant", group: "vagrant",
         mount_options: ["dmode=775","fmode=755"]
     else
-      mgvb.vm.synced_folder "../", "/home/vagrant/labs",
+      mgvb.vm.synced_folder "./", "/home/vagrant/project",
         mount_options: ["dmode=775", "fmode=755"]
     end # of shared folders
     # Provisioning with reload (reboot)
