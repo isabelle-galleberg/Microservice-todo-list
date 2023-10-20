@@ -18,18 +18,25 @@ router.get('/health', (req, res) => {
     res.end();
 });
 
-// Check an item //!NB these expect an id param in URL to update item status
-router.put('/check/:id', (req, res) => {
+// Toggle an item (check/uncheck depending on state)
+router.put('/toggle/:id', async (req, res) => {
     const itemId = req.params.id;
-    updateItemStatus(itemId, true);
-    res.json({ status: "Item checked" });
-});
+    const updatedTodo = req.body; // The updatedTodo object sent in the request body
 
-// Uncheck an item
-router.put('/uncheck/:id', (req, res) => {
-    const itemId = req.params.id;
-    updateItemStatus(itemId, false);
-    res.json({ status: "Item unchecked" });
+    if (updatedTodo && typeof updatedTodo.completed === 'boolean') {
+        const status = updatedTodo.completed; // Toggle the status to be same as input status, assume updatedTodo gives desired new status
+
+        try {
+            const result = await updateItemStatus(itemId, status);
+            const message = status ? "Item checked" : "Item unchecked";
+            res.status(200).json({ status: message, result });
+        } catch (error) {
+            console.error("Error toggling item:", error);
+            res.status(500).json({ error: "Failed to toggle the item" });
+        }
+    } else {
+        res.status(400).json({ error: "Invalid request body" });
+    }
 });
 
 // Update item status in the database
