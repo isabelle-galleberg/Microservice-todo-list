@@ -1,6 +1,8 @@
 # To-Do List Web Application
 AGISIT 2023
 
+WORKING: [DRAW.IO](https://drive.google.com/file/d/1YTpFg0gd-9eK2pGvSjLzb5hUPA-y5P1c/view?usp=share_link)
+
 ## Authors - Group 16
 | Number | Name               |				
 | -------|--------------------|
@@ -33,6 +35,10 @@ _MongoDB_ serves as a backend service that handles the storage and retrieval of 
 The _Svelte_ service is a frontend application designed in Svelte.js. It functions as the visualization for our To-Do list, and is connected to the Expressed API functions.  
 
 ## Architecture 
+The complete architecture of this implementation is as follows:
+
+![Architecture](./report/assets/architecture.png)
+
 
 
 
