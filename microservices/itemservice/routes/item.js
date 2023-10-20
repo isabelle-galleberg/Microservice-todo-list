@@ -3,6 +3,8 @@ const router = express.Router(); //to handle http routes
 const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs")
 
+// Checks/unchecks todo item
+
 // Get database connection string
 function getMondoDBurl() {
     const data = fs.readFileSync('database_ips', 'utf8'); //! Requires the file database_ips to be set up with ips of our mongodb servers

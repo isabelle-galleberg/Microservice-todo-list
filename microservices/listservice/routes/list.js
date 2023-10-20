@@ -3,6 +3,8 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs")
 
+// Adds/removes todo items from list
+
 // Get database connection string
 function getConnectionString() {
     const data = fs.readFileSync('database_ips', 'utf8');
@@ -20,16 +22,16 @@ router.get('/health', (req, res) => {
 
 // Add a todo list item
 router.post('/add', (req, res) => {
-    const item = req.body.item;
+    const item = req.body.text; // Modify to extract the item text
     insertInDB(item, 'add');
-    res.json({ status: "Item added" });
+    res.status(201).json({ status: "Item added" }); // Return a 201 status code for a successful POST
 });
 
 // Remove a todo list item
 router.delete('/remove/:id', (req, res) => {
     const itemId = req.params.id;
     removeFromDB(itemId);
-    res.json({ status: "Item removed" });
+    res.status(204).json({ status: "Item removed" }); // Return a 204 status code for a successful DELETE
 });
 
 // Insert item into database
