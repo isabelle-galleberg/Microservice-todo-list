@@ -23,7 +23,7 @@ router.get('/health', (req, res) => {
 // Add a todo list item
 router.post('/add', (req, res) => {
     const item = req.body.text; // Modify to extract the item text
-    insertInDB(item, 'add');
+    insertInDB(item);
     res.status(201).json({ status: "Item added" }); // Return a 201 status code for a successful POST
 });
 
@@ -35,32 +35,44 @@ router.delete('/:id', (req, res) => {
 });
 
 // Insert item into database
-function insertInDB(item, operation) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        const dbo = db.db("todo");
-        if (!dbo.collection('list')) dbo.createCollection("list");
-        const myobj = { item, operation };
-        dbo.collection("list").insertOne(myobj, function (err, res) {
-            if (err) throw err;
-            console.log("1 entry inserted");
-            db.close();
-        });
-    });
+async function insertInDB(item) {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const db = client.db("todo");
+        const collection = db.collection("list");
+        const result = await collection.insertOne(item);
+        return result.ops[0]; // Return the added item
+    } catch (error) {
+        console.error("Error inserting item:", error);
+        throw error;
+    } finally {
+        client.close();
+    }
 }
 
-// Remove item from database
-function removeFromDB(itemId) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        const dbo = db.db("todo");
-        const query = { _id: itemId };
-        dbo.collection("list").deleteOne(query, function (err, obj) {
-            if (err) throw err;
-            console.log("1 entry deleted");
-            db.close();
-        });
-    });
+// Remove item from the database
+async function removeFromDB(itemId) {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const db = client.db("todo");
+        const collection = db.collection("list");
+        const result = await collection.deleteOne({ _id: itemId });
+        if (result.deletedCount === 1) {
+            return { success: true, message: "Item removed" };
+        } else {
+            return { success: false, message: "Item not found" };
+        }
+    } catch (error) {
+        console.error("Error removing item:", error);
+        throw error;
+    } finally {
+        client.close();
+    }
 }
+
 
 module.exports = router;
