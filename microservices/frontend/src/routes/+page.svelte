@@ -1,40 +1,81 @@
 <script lang="ts">
+  import axios from "axios"
+
   type Todo = {
+    id: string;
     text: string;
     completed: boolean;
   }
 
-  // TODO: Replace this list with data retrieved from a database
+  // TODO: remove from file 
+  const balancers = {
+    "list": "{{ hostvars['balancer2'].ansible_host }}",
+    "item": "{{ hostvars['balancer3'].ansible_host }}"
+}
+
+  const list_url = `http://${balancers.list}:80/`
+  const item_url = `http://${balancers.item}:80/`
+
   let todos: Todo[] = [];
-  let newTodo = '';
-  let editIndex: number | null = null; 
-  let editedText = '';
+  let newTodo = ''; 
 
-  function addTodo() {
-    if (newTodo.trim() === '') return;
-    todos = [...todos, { text: newTodo, completed: false }];
-    newTodo = '';
+  $: {
+  getTodos()
+}
+
+  async function getTodos() {
+  try {
+    const response = await axios.get(list_url);
+    if (response.status === 200) {
+      todos = response.data;
+      console.log("Todos fetched and stored successfully:", todos);
+    } else {
+      console.error("Failed to fetch todos. Status code: ", response.status);
+    }
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+  }
+}
+
+  async function addTodo() {
+  try {
+    const response = await axios.post(list_url, { text: newTodo, completed: false });
+    if (response.status === 201) {
+      console.log("New todo posted successfully:", response.data);
+    } else {
+      console.error("Failed to post a new todo. Status code: ", response.status);
+    }
+  } catch (error) {
+    console.error("Error posting a new todo:", error);
+  }
+}
+
+async function deleteTodo(id: string) {
+  try {
+    const response = await axios.delete(`${list_url}/${id}`);
+    if (response.status === 204) {
+      console.log(`Todo was deleted successfully.`);
+    } else {
+      console.error("Failed to delete the todo. Status code: ", response.status);
+    }
+  } catch (error) {
+    console.error("Error deleting the todo:", error);
+  }
+}
+
+  async function toggleTodo(id: string, updatedTodo: Todo) {
+    try {
+    const response = await axios.put(`${item_url}/${id}`, updatedTodo);
+    if (response.status === 200) {
+      console.log(`Todo with was updated successfully:`, response.data);
+    } else {
+      console.error("Failed to update the todo. Status code: ", response.status);
+    }
+  } catch (error) {
+    console.error("Error updating the todo:", error);
+  }
   }
 
-  function toggleTodo(index: number) {
-    todos[index].completed = !todos[index].completed;
-    todos = [...todos];
-  }
-
-  function removeTodo(index: number) {
-    todos.splice(index, 1);
-    todos = [...todos];
-  }
-
-  function editTodo(index: number) {
-    editIndex = index;
-    editedText = todos[index].text;
-  }
-
-  function saveTodo(index: number) {
-    todos[index].text = editedText.trim();
-    editIndex = null;
-  }
 </script>
 
 <div class="p-4 flex flex-col items-center">
@@ -50,35 +91,22 @@
     <button on:click={addTodo} class="btn btn-info">Add</button>
   </div>
   <ul class="w-full max-w-sm">
-    {#each todos as todo, index (todo.text)}
+    {#each todos as todo (todo.text)}
       <li
         class="flex items-center justify-between p-2 border border-gray-300 rounded-lg mb-2"
       >
-        {#if editIndex === index}
-        <div class="max-w-sm flex flex-row gap-3 w-full items-center">
-          <input
-            type="text"
-            class="input input-bordered w-full"
-            bind:value={editedText}
-            on:keydown={(e) => e.key === 'Enter' && saveTodo(index)}
-          />
-          <button on:click={() => saveTodo(index)} class="btn btn-success">Save</button>
-          </div>
-        {:else}
           <label class="flex items-center space-x-2" class:line-through={todo.completed}>
             <input
               type="checkbox"
               class="checkbox"
               bind:checked={todo.completed}
-              on:click={() => toggleTodo(index)}
+              on:change={() => toggleTodo(todo.id, { ...todo, completed: !todo.completed })}
             />
             <span>{todo.text}</span>
           </label>
           <div>
-            <button on:click={() => editTodo(index)} class="btn btn-warning">Edit</button>
-            <button on:click={() => removeTodo(index)} class="btn btn-error">Remove</button>
+            <button on:click={() => deleteTodo(todo.id)} class="btn btn-error">Remove</button>
           </div>
-        {/if}
       </li>
     {/each}
   </ul>
