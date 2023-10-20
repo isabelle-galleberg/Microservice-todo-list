@@ -42,18 +42,29 @@ router.put('/toggle/:id', async (req, res) => {
 });
 
 // Update item status in the database
-function updateItemStatus(itemId, status) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        const dbo = db.db("todo");
+async function updateItemStatus(itemId, status) {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const db = client.db("todo");
+        const collection = db.collection("list");
         const query = { _id: itemId };
         const newValues = { $set: { checked: status } };
-        dbo.collection("list").updateOne(query, newValues, function (err) {
-            if (err) throw err;
-            console.log("1 item updated");
-            db.close();
-        });
-    });
+        const result = await collection.updateOne(query, newValues);
+
+        if (result.modifiedCount === 1) {
+            return { success: true, message: "Item status updated" };
+        } else {
+            return { success: false, message: "Item not found or status unchanged" };
+        }
+    } catch (error) {
+        console.error("Error updating item status:", error);
+        throw error;
+    } finally {
+        client.close();
+    }
 }
+
 
 module.exports = router;
