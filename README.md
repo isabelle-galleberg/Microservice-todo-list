@@ -17,21 +17,20 @@
 
 
 ## Application
-Our application is a stimple To-Do list, designed as a microservice-based containerized web application. The frontend is written using Svelte, while the core operations are served by microservices as follows:
+Our application is a simple To-Do list, designed as a microservice-based containerized web application. The core operations are served by microservices as follows:
 
-1. **Expressed list service** - Handles adding/removing of items (Express.js)
-2. **Expressed item service** - Manages checking/unchecking of items (Express.js)
-3. **MongoDB service** - Backend service for storage and retrieval of To-Do list items.
-4. **Svelte frontend service** - Visualization for our To-Do list connected to the Expressed API functions.
+1. **List service** - Handles adding/removing of items (Express.js)
+2. **Item service** - Manages checking/unchecking of items (Express.js)
+3. **Database service** - Backend service for storage and retrieval of To-Do list items (MongoDB).
+4. **Frontend service** - Visualization for our To-Do list connected to the Expressed API functions (Svelte).
 
-
-_Expressed_ is a REST API-based implementation which our serves basic To-Do list functions as APIs to the frontend and database. We have two Expressed services:
+_Express.js_ is a REST API-based implementation which serves basic To-Do list functions as APIs. We have two Expressed services:
 1. **List service** - Adding/removing items to/from list
 2. **Item service** - Checking/unchecking an item
 
 _MongoDB_ serves as a backend service that handles the storage and retrieval of To-Do list items, provided to it via the Expressed APIs. 
 
-The _Svelte_ service is a frontend application designed in Svelte.js. It functions as the visualization for our To-Do list, and is connected to the Expressed API functions.  
+The frontend service is a frontend application designed in Svelte.js. It functions as the visualization for our To-Do list, and its functions add/remove items and check/uncheck items are served by the express.js services.
 
 ## Architecture 
 Our microservice-based architecture ensures scalability and performance. 
@@ -45,8 +44,8 @@ Here's a basic outline:
 
 **Data flow:**
 1. Users interact with the Svelte frontend.
-2. Requests go through the Expressed services.
-3. Any data operation will then be persisted or retrieved from MongoDB.
+2. Requests go through the Express.js services.
+3. Any data operation will then be persisted or retrieved from the database service.
 
 
 The complete architecture of this implementation is as follows:
@@ -55,6 +54,19 @@ The complete architecture of this implementation is as follows:
 WORKING: [DRAW.IO](https://drive.google.com/file/d/1YTpFg0gd-9eK2pGvSjLzb5hUPA-y5P1c/view?usp=share_link)
 
 We chose to build our cluster using GKE. 
+
+The various microservices are deployed at the following addresses inside the cluster:
+|Service       |Cluster Address       |Cluster Port       |API endpoint       |
+|  ----------  |  ------------------  |  ---------------  |  ---------------  |
+|List          |       |       |       |
+|Item          |       |       |       |
+|Database      |       |       |       |
+|Frontend      |       |       |       |
+|Loadbalancer  |       |       |       |
+|Dashboard     |       |       |       |
+
+
+
 
 ## Services
 | Service                         | Language      |Description                                                          |
@@ -171,4 +183,4 @@ Clicking "add" makes the new item appear in the list:
 
 
 ## License
-For open source projects, say how it is licensed.
+This project is licensed under the terms of the MIT license.
