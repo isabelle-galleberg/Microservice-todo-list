@@ -8,12 +8,12 @@
 | 108444 | Tilde Eriksen Eine | 
 
 ## Table of Contents
-1. [Application](#Application)
-3. [Architecture](#Architecture)
-4. [Services](#Services)
-5. [Build and Deploy](#Build-and-Deploy)
-6. [Demo](#Demo)
-7.  [License](#License)
+1. [Application](#application)
+3. [Architecture](#architecture)
+4. [Services](#services)
+5. [Build and Deploy](#build-and-Deploy)
+6. [Demo](#demo)
+7.  [License](#license)
 
 
 ## Application
