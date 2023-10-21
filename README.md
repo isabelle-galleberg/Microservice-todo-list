@@ -82,6 +82,8 @@ Accounts:
 Environment Setup:
 1. Log in to Google Cloud Platform.
 2. Navigate to the **Google Compute Engine** and enable its API.
+3. Create a Service Account 
+   - Dashboard -> IAM and Administrator -> Service Account -> Mange Keys -> Create A New Key -> Export JSON
 
 ### Configuration
 1. Clone the project repository to your local machine.
@@ -92,19 +94,39 @@ git clone https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit23-g16.git
 ```
 cd agisit23-g16
 ```
-1. In the root directory of the project, run the following commands:
+3. Upload the exported GCP Service Account **'.json'** key to the **'terraform'** files directory.
 
+4. Navigate to the gcpcloud folder and open the file **'terraform-gcp-variables.tf'**.
+
+5. Replace the placeholder values with your specific GCP configurations.
+
+6. In the root directory of the project, run the following commands:
 ```
 vagrant up
-vagrant ssh project-mgmt
+vagrant ssh mgmt
 ```
+7. In the mgmt virtual machine, generate an ssh key by running the following command:
 
-4. Upload the exported GCP Service Account **'.json'** key to the **'terraform'** files directory.
+```
+ssh-keygen -t rsa -b 4096
+```
+8. In the mgmt virtual machine inside the gcpcloud folder, run:
 
-5. Navigate to the gcpcloud folder and open the file **'terraform-gcp-variables.tf'**.
+```
+terraform init
+terraform plan
+terraform apply
+```
+To check the configurations, you can then run 
 
-6. Replace the placeholder values with your specific GCP configurations.
-
+```
+terraform output
+ansible all -m ping
+```
+9. Finally, after checking that configuration is working as intended, run
+```
+ansible-playbook ansible-gcp-servers-setup-all.yml
+```
 
 
 
