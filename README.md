@@ -11,9 +11,9 @@
 1. [Application](#application)
 3. [Architecture](#architecture)
 4. [Services](#services)
-5. [Build and Deploy](#build-and-Deploy)
+5. [Build and Deploy](#build-and-deploy)
 6. [Demo](#demo)
-7.  [License](#license)
+7. [License](#license)
 
 
 ## Application
