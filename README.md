@@ -11,8 +11,8 @@
 1. [Application](#Application)
 3. [Architecture](#Architecture)
 4. [Services](#Services)
-5. [Kubernetes Components](#Kubernetes-Components)
-6. [Build and Deploy](#Build-and-Deploy)
+5. [Build and Deploy](#Build-and-Deploy)
+6. [Demo](#Demo)
 7.  [License](#License)
 
 
@@ -64,7 +64,6 @@ We chose to build our cluster using GKE.
 | [listservice](/microservices/listservice/) | Express.js | Adds and removes items from To Do list in MongoDB according to users' actions.   |
 | [databaseservice](/microservices/databaseservice/) | MongoDB | Persistent storage for users' To Do list items. |
 
-## Kubernetes components
 
 ## Build and Deploy
 ### Prerequisites
@@ -128,8 +127,14 @@ ansible all -m ping
 ansible-playbook ansible-gcp-servers-setup-all.yml
 ```
 
+## Demo
+This is the landing page:
+![Photo of landing page](/report/assets/landingpage.png)
 
+You input your task in the text prompt:
+![Photo of text prompt](/report/assets/enterprompt.png)
 
+Clicking "add" makes the new item appear in the list:
 
 
 
