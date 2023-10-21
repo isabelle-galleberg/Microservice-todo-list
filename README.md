@@ -67,15 +67,20 @@ We chose to build our cluster using GKE.
 
 ## Build and Deploy
 ### Prerequisites
-Tools/Software:
-1. Vagrant: Download [here](https://developer.hashicorp.com/vagrant/downloads)
-2. VirtualBox: Download [here](https://www.virtualbox.org/wiki/Downloads)
-3. VirtualBox Extension Pack: Should be installed after installing VirtualBox.
-4. Terraform: Download [here](https://developer.hashicorp.com/terraform/downloads)
-5. Shell environment with **gcloud**, **git** and **kubectl**
+#### Tools/Software:
+1. **Vagrant:** Download [here](https://developer.hashicorp.com/vagrant/downloads)
+2. **Terraform:** Download [here](https://developer.hashicorp.com/terraform/downloads)
+3. Shell environment with **gcloud**, **git** and **kubectl**
+
+Additionally, for **Windows**, **macOS (Intel)** and **Linux**:
+1. **VirtualBox:** Download [here](https://www.virtualbox.org/wiki/Downloads)
+2. **VirtualBox Extension Pack:** Should be installed after installing VirtualBox.
+
+For, **macOs (Apple chips)**:
+1. **Docker:** Docker desktop enables to build and run containerized applications. Used since vbox is not supported on Apple Chips.
 
 
-Accounts:
+#### Accounts:
 - **Google Cloud Platform (GCP)**: Ensure you have an active GCP account with billing enabled.
 
 Environment Setup:
@@ -93,39 +98,66 @@ git clone https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit23-g16.git
 ```
 cd agisit23-g16
 ```
-3. Upload the exported GCP Service Account **'.json'** key to the **'terraform'** files directory.
+3. Upload the [exported GCP Service Account](#accounts) **'.json'** key to the **'gcpcloud'** files directory.
 
 4. Navigate to the gcpcloud folder and open the file **'terraform-gcp-variables.tf'**.
 
 5. Replace the placeholder values with your specific GCP configurations.
 
-6. In the root directory of the project, run the following commands:
+6. The project contains two **Vagrantfiles**: One _Vagrantfile.docker_, and one _Vagrantfile.vbox_. Rename the one you will use to just **"Vagrantfile"**.
+    - If you installed **vbox** previously, use **Vagrantfile.vbox** -> **Vagrantfile**
+    - If you installed **docker** previously, use **Vagrantfile.docker** -> **Vagrantfile**
+
+Validate your Vagrantfile before proceeding, using the command:
+```
+vagrant validate
+```
+
+7. In the root directory of the project, run the following commands:
 ```
 vagrant up
 vagrant ssh mgmt
 ```
-7. In the mgmt virtual machine, generate an ssh key by running the following command:
+8. **In the mgmt virtual machine**, generate an ssh key by running the following command:
 
 ```
-ssh-keygen -t rsa -b 4096
+ssh-keygen -t rsa -b 2048
 ```
-8. In the mgmt virtual machine inside the gcpcloud folder, run:
+Hit enter to all prompts, and do not enter a password.
+
+9. To deploy the local RSA key pair for the vagrant user, we run the following command:
+
+```
+ssh-addkey.yml --ask-pass
+```
+The password to use here is **vagrant**.
+
+10. In the mgmt virtual machine **inside the gcpcloud folder**, run:
 
 ```
 terraform init
 terraform plan
 terraform apply
 ```
-To check the configurations, you can then run 
+To check the configurations, you can then run:
 
 ```
 terraform output
 ansible all -m ping
 ```
-9. Finally, after checking that configuration is working as intended, run
+11. Finally, after checking that configuration is working as intended, **in the same folder in the VM**, run:
 ```
 ansible-playbook ansible-gcp-servers-setup-all.yml
 ```
+
+### Finishing
+When finished running, **Stop the Virtual Machines** and verify the **global state** of all active Vagrant environments on the system, issuing the following commands:
+
+```
+vagrant halt
+vagrant global-status
+```
+
 
 ## Demo
 This is the landing page:
