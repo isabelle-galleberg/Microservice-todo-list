@@ -3,7 +3,7 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs")
 
-// Adds/removes todo items from list
+// Adds/removes todo items from list, and fetches todo items from database to give to frontend service
 
 // Get database connection string
 function getConnectionString() {
@@ -19,6 +19,34 @@ console.log(url);
 router.get('/health', (req, res) => {
     res.end();
 });
+
+// Fetch all todo list items
+router.get('/todos', async (req, res) => {
+    try {
+        const todos = await fetchAllTodos();
+        res.status(200).json(todos);
+    } catch (error) {
+        console.error("Error fetching todos:", error);
+        res.status(500).json({ status: "Failed to fetch todos" }); // Return a 500 status code for a server error
+    }
+});
+
+// Fetch items from database
+async function fetchAllTodos() {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+    try {
+        await client.connect();
+        const db = client.db("todo");
+        const collection = db.collection("list");
+        const todos = await collection.find({}).toArray(); // Fetch all todos from the collection
+        return todos;
+    } catch (error) {
+        console.error("Error fetching all todos:", error);
+        throw error;
+    } finally {
+        client.close();
+    }
+}
 
 // Add a todo list item
 router.post('/add', (req, res) => {

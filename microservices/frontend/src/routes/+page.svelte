@@ -25,7 +25,7 @@
 
   async function getTodos() {
     try {
-      const response = await axios.get(list_url);
+      const response = await axios.get(`${list_url}/todos`);
       if (response.status === 200) {
         todos = response.data;
         console.log("Todos fetched and stored successfully:", todos);
