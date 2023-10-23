@@ -22,8 +22,6 @@ resource "google_compute_instance" "frontend" {
 
     network_interface {
         network = "default"
-        access_config {
-        }
     }
 
     metadata = {
@@ -78,8 +76,6 @@ resource "google_compute_instance" "list" {
 
     network_interface {
         network = "default"
-        access_config {
-        }
     }
 
     metadata = {
@@ -107,8 +103,6 @@ resource "google_compute_instance" "item" {
 
     network_interface {
         network = "default"
-        access_config {
-        }
     }
 
     metadata = {
@@ -163,8 +157,6 @@ resource "google_compute_instance" "database" {
 
     network_interface {
         network = "default"
-        access_config {
-        }
     }
 
     metadata = {
