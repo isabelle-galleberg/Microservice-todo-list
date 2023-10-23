@@ -40,7 +40,7 @@ resource "google_compute_firewall" "metrics_rules" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["balancer", "frontend", "databases"]
+  target_tags = ["balancer", "frontend", "database"]
 }
 
 resource "google_compute_firewall" "monitor_rules" {
@@ -56,8 +56,8 @@ resource "google_compute_firewall" "monitor_rules" {
   target_tags = ["monitor"]
 }
 
-resource "google_compute_firewall" "databases_rules" {
-  name    = "databases"
+resource "google_compute_firewall" "_rules" {
+  name    = "database"
   network = "default"
 
   allow {
@@ -66,5 +66,5 @@ resource "google_compute_firewall" "databases_rules" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["databases"]
+  target_tags = ["database"]
 }

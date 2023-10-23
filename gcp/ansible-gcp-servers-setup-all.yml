@@ -29,7 +29,7 @@
         state: present
 
 # First: Setup mongo replicas
-- hosts: databases
+- hosts: database
   gather_facts: yes
   remote_user: ubuntu
   become: yes
