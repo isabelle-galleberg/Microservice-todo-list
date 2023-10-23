@@ -121,8 +121,7 @@ resource "google_compute_instance" "item" {
 
 ###########  monitor   #############
 resource "google_compute_instance" "monitor" {
-    count = 2
-    name = "monitor${count.index+1}"
+    name = "monitor"
     machine_type = var.GCP_MACHINE_TYPE
     zone = var.GCP_ZONE
 
