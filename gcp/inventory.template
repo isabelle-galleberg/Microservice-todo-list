@@ -1,6 +1,6 @@
 
 %{ for index, bal in balancer_names ~}
-${ bal } ansible_host=${ bal_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+${ bal } ansible_host=${ balancer_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
 %{ for index, fe in fe_names ~}
 ${ fe } ansible_host=${ fe_ips[index] } ansible_user=ubuntu ansible_connection=ssh
