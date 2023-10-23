@@ -2,8 +2,8 @@
 %{ for index, bal in balancer_names ~}
 ${ bal } ansible_host=${ balancer_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
-%{ for index, fe in fe_names ~}
-${ fe } ansible_host=${ fe_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ for index, frontend in frontend_names ~}
+${ frontend } ansible_host=${ frontend_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
 %{ for index, item in item_names ~}
 ${ item } ansible_host=${ item_ips[index] } ansible_user=ubuntu ansible_connection=ssh
@@ -12,8 +12,8 @@ ${ item } ansible_host=${ item_ips[index] } ansible_user=ubuntu ansible_connecti
 ${ list } ansible_host=${ list_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
 ${ monitor_name }   ansible_host=${ monitor_ip[0] } ansible_user=ubuntu ansible_connection=ssh
-%{ for index, db in db_names ~}
-${ db } ansible_host=${ db_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ for index, databases in databases_names ~}
+${ databases } ansible_host=${ databases_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
 
 # The local deployment host VM
@@ -21,13 +21,13 @@ ${ db } ansible_host=${ db_ips[index] } ansible_user=ubuntu ansible_connection=s
 localhost           ansible_connection=local
 
 [databases]
-%{ for index, db in db_names ~}
-${ db }
+%{ for index, databases in databases_names ~}
+${ databases }
 %{ endfor ~}
 
 [servers]
-%{ for index, fe in fe_names ~}
-${ fe }
+%{ for index, frontend in frontend_names ~}
+${ frontend }
 %{ endfor ~}
 %{ for index, item in item_names ~}
 ${ item }
@@ -48,8 +48,8 @@ ${ list }
 %{ endfor ~}
 
 [frontend]
-%{ for index, fe in fe_names ~}
-${ fe }
+%{ for index, frontend in frontend_names ~}
+${ frontend }
 %{ endfor ~}
 
 [balancer]
@@ -64,16 +64,16 @@ ${ list }
 %{ for index, item in item_names ~}
 ${ item }
 %{ endfor ~}
-%{ for index, fe in fe_names ~}
-${ fe }
+%{ for index, frontend in frontend_names ~}
+${ frontend }
 %{ endfor ~}
 
 [targets]
 %{ for index, bal in balancer_names ~}
 ${ bal }
 %{ endfor ~}
-%{ for index, fe in fe_names ~}
-${ fe }
+%{ for index, frontend in frontend_names ~}
+${ frontend }
 %{ endfor ~}
 %{ for index, item in item_names ~}
 ${ item }
@@ -81,8 +81,8 @@ ${ item }
 %{ for index, list in list_names ~}
 ${ list }
 %{ endfor ~}
-%{ for index, db in db_names ~}
-${ db }
+%{ for index, databases in databases_names ~}
+${ databases }
 %{ endfor ~}
 
 
@@ -90,8 +90,8 @@ ${ db }
 %{ for index, bal in balancer_names ~}
 ${ bal }
 %{ endfor ~}
-%{ for index, fe in fe_names ~}
-${ fe }
+%{ for index, frontend in frontend_names ~}
+${ frontend }
 %{ endfor ~}
 %{ for index, item in item_names ~}
 ${ item }
@@ -100,6 +100,6 @@ ${ item }
 ${ list }
 %{ endfor ~}
 ${ monitor_name }
-%{ for index, db in db_names ~}
-${ db }
+%{ for index, databases in databases_names ~}
+${ databases }
 %{ endfor ~}
