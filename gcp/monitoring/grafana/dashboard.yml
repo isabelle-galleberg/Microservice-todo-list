@@ -3,13 +3,13 @@ apiVersion: 1
 
 providers:
   # <string> an unique provider name. Required
-  - name: 'Node-Exporter'
+  - name: "Node-Exporter"
     # <int> Org id. Default to 1
     orgId: 1
     # <string> name of the dashboard folder.
-    folder: 'Generic'
+    folder: "Generic"
     # <string> folder UID. will be automatically generated if not specified
-    folderUid: ''
+    folderUid: ""
     # <string> provider type. Default to 'file'
     type: file
     # <bool> disable dashboard deletion
@@ -20,6 +20,6 @@ providers:
     allowUiUpdates: false
     options:
       # <string, required> path to dashboard files on disk. Required when using the 'file' type
-      path: /etc/grafana/provisioning/dashboards/calculator_service_dashboard.json
+      path: /etc/grafana/provisioning/dashboards/dashboard.json
       # <bool> use folder names from filesystem to create folders in Grafana
       foldersFromFilesStructure: true

@@ -148,7 +148,7 @@ resource "google_compute_instance" "monitor" {
 
 ###########  databases   #############
 resource "google_compute_instance" "database" {
-    count = 2
+    count = 3
     name = "database${count.index+1}"
     machine_type = var.GCP_MACHINE_TYPE
     zone = var.GCP_ZONE
