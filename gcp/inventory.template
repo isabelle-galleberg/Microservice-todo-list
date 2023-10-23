@@ -12,17 +12,17 @@ ${ item } ansible_host=${ item_ips[index] } ansible_user=ubuntu ansible_connecti
 ${ list } ansible_host=${ list_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
 ${ monitor_name }   ansible_host=${ monitor_ip[0] } ansible_user=ubuntu ansible_connection=ssh
-%{ for index, databases in databases_names ~}
-${ databases } ansible_host=${ databases_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ for index, database in database_names ~}
+${ database } ansible_host=${ database_ips[index] } ansible_user=ubuntu ansible_connection=ssh
 %{ endfor ~}
 
 # The local deployment host VM
 [osmgmt]
 localhost           ansible_connection=local
 
-[databases]
-%{ for index, databases in databases_names ~}
-${ databases }
+[database]
+%{ for index, database in database_names ~}
+${ database }
 %{ endfor ~}
 
 [servers]
@@ -81,8 +81,8 @@ ${ item }
 %{ for index, list in list_names ~}
 ${ list }
 %{ endfor ~}
-%{ for index, databases in databases_names ~}
-${ databases }
+%{ for index, database in database_names ~}
+${ database }
 %{ endfor ~}
 
 
@@ -100,6 +100,6 @@ ${ item }
 ${ list }
 %{ endfor ~}
 ${ monitor_name }
-%{ for index, databases in databases_names ~}
-${ databases }
+%{ for index, database in database_names ~}
+${ database }
 %{ endfor ~}
