@@ -1,16 +1,11 @@
 <script lang="ts">
   import axios from "axios";
+  import balancers from '../../microservices_balancers.json'
 
   type Todo = {
     id: string;
     text: string;
     completed: boolean;
-  };
-
-  // TODO: remove from file
-  const balancers = {
-    list: "{{ hostvars['balancer2'].ansible_host }}",
-    item: "{{ hostvars['balancer3'].ansible_host }}",
   };
 
   const list_url = `http://${balancers.list}:80/`;

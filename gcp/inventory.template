@@ -1,0 +1,105 @@
+
+%{ for index, bal in bal_names ~}
+${ bal } ansible_host=${ bal_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ endfor ~}
+%{ for index, fe in fe_names ~}
+${ fe } ansible_host=${ fe_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ endfor ~}
+%{ for index, item in item_names ~}
+${ item } ansible_host=${ item_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ endfor ~}
+%{ for index, list in list_names ~}
+${ list } ansible_host=${ list_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ endfor ~}
+${ monitor_name }   ansible_host=${ monitor_ip[0] } ansible_user=ubuntu ansible_connection=ssh
+%{ for index, db in db_names ~}
+${ db } ansible_host=${ db_ips[index] } ansible_user=ubuntu ansible_connection=ssh
+%{ endfor ~}
+
+# The local deployment host VM
+[osmgmt]
+localhost           ansible_connection=local
+
+[databases]
+%{ for index, db in db_names ~}
+${ db }
+%{ endfor ~}
+
+[servers]
+%{ for index, fe in fe_names ~}
+${ fe }
+%{ endfor ~}
+%{ for index, item in item_names ~}
+${ item }
+%{ endfor ~}
+%{ for index, list in list_names ~}
+${ list }
+%{ endfor ~}
+
+
+[item]
+%{ for index, item in item_names ~}
+${ item }
+%{ endfor ~}
+
+[list]
+%{ for index, list in list_names ~}
+${ list }
+%{ endfor ~}
+
+[frontend]
+%{ for index, fe in fe_names ~}
+${ fe }
+%{ endfor ~}
+
+[balancer]
+%{ for index, bal in bal_names ~}
+${ bal }
+%{ endfor ~}
+
+[nodeServices]
+%{ for index, list in list_names ~}
+${ list }
+%{ endfor ~}
+%{ for index, item in item_names ~}
+${ item }
+%{ endfor ~}
+%{ for index, fe in fe_names ~}
+${ fe }
+%{ endfor ~}
+
+[targets]
+%{ for index, bal in bal_names ~}
+${ bal }
+%{ endfor ~}
+%{ for index, fe in fe_names ~}
+${ fe }
+%{ endfor ~}
+%{ for index, item in item_names ~}
+${ item }
+%{ endfor ~}
+%{ for index, list in list_names ~}
+${ list }
+%{ endfor ~}
+%{ for index, db in db_names ~}
+${ db }
+%{ endfor ~}
+
+
+[all]
+%{ for index, bal in bal_names ~}
+${ bal }
+%{ endfor ~}
+%{ for index, fe in fe_names ~}
+${ fe }
+%{ endfor ~}
+%{ for index, item in item_names ~}
+${ item }
+%{ endfor ~}
+%{ for index, list in list_names ~}
+${ list }
+%{ endfor ~}
+${ monitor_name }
+%{ for index, db in db_names ~}
+${ db }
+%{ endfor ~}

@@ -1,7 +1,11 @@
 .vagrant
 Vagrantfile
-Vagrantfile.docker
-Vagrantfile.vbox
+.terraform*
+inventory
+*.tfstate*
 agisit-2324-website-16-*
 .DS_Store
 id_rsa
+Desktop.ini
+.vscode
+.idea

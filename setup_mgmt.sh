@@ -1,0 +1,1 @@
+cp ./gcp/id_rsa* ~/.ssh/
