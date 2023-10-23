@@ -1,6 +1,6 @@
 <script lang="ts">
   import axios from "axios";
-  import balancers from '../../microservices_balancers.json'
+  import balancers from '../microservices_balancers.json'
 
   type Todo = {
     id: string;
@@ -8,8 +8,8 @@
     completed: boolean;
   };
 
-  const list_url = `http://${balancers.list}:80/`;
-  const item_url = `http://${balancers.item}:80/`;
+  const list_url = `http://${balancers.lists}:80/`;
+  const item_url = `http://${balancers.items}:80/`;
 
   let todos: Todo[] = [];
   let newTodo = "";
