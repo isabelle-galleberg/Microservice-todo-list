@@ -1,0 +1,37 @@
+# Check if all node services are running their respective services
+- name: Check and Restart item microservice
+  hosts:
+    - item
+    - list
+  become: yes
+  tasks:
+    - name: Check if Node.js service is running
+      command: ps aux | grep -v grep | grep -v node_exporter | grep node
+      ignore_errors: yes
+      register: service_status
+
+    - name: Restart Node.js service
+      command:
+        chdir: /home/ubuntu/src/
+        cmd: sudo npm start
+      async: 1000
+      poll: 0
+      when: service_status.rc != 0
+
+- name: Check and restart frontend
+  hosts: frontend
+  become: yes
+  tasks:
+        - name: Check if Node.js service is running
+      command: ps aux | grep -v grep | grep -v node_exporter | grep node
+      ignore_errors: yes
+      register: service_status
+
+    - name: Restart Node.js service
+      command:
+        chdir: /home/ubuntu/src/
+        cmd: sudo npm run dev
+      async: 1000
+      poll: 0
+      when: service_status.rc != 0
+      
