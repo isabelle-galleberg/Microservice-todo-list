@@ -139,7 +139,7 @@
       file:
         path: /home/ubuntu/src
         state: directory
-        mode: 0755
+        mode: 0777
 
     - name: Copy project code
       copy:
