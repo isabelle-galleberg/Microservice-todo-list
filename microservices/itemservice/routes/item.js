@@ -15,21 +15,11 @@ function getMondoDBurl() {
   return `mongodb://${ips.join(',')}/?replicaSet=rs0`; // replica set the MongoDB connection string can connect to
 }
 
-function getOwnIP() {
-  const data = fs.readFileSync('own_ips', 'utf8');
-  const ips = data
-    .split('\n')
-    .filter((ip) => ip !== '')
-    .map((ip) => ip.trim());
-  return ips[0];
-}
-
 const url = getMondoDBurl();
-const ip = getOwnIP();
 
 // Health check endpoint, checking that service is up
 router.get('/health', (req, res) => {
-  res.send(ip);
+  res.send();
 });
 
 // Toggle an item (check/uncheck depending on state)
