@@ -22,7 +22,7 @@
   hosts: frontend
   become: yes
   tasks:
-        - name: Check if Node.js service is running
+    - name: Check if Node.js service is running
       command: ps aux | grep -v grep | grep -v node_exporter | grep node
       ignore_errors: yes
       register: service_status
@@ -34,4 +34,3 @@
       async: 1000
       poll: 0
       when: service_status.rc != 0
-      
