@@ -8,8 +8,8 @@
     completed: boolean;
   };
 
-  const list_url = `http://${balancers.lists}:80/`;
-  const item_url = `http://${balancers.items}:80/`;
+  const list_url = `http://${balancers.lists}:80`;
+  const item_url = `http://${balancers.items}:80`;
 
   let todos: Todo[] = [];
   let newTodo = "";
