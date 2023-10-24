@@ -532,3 +532,20 @@
         name: grafana-server
         enabled: yes
         state: started
+
+# Make sure mongodb is running
+- name: Check and Start MongoDB Service
+  hosts: database
+  become: yes
+
+  tasks:
+    - name: Check if MongoDB is running
+      shell: ps aux | grep mongod | grep -v grep
+      register: mongod_status
+      ignore_errors: yes
+
+    - name: Start MongoDB if not running
+      systemd:
+        name: mongod
+        state: started
+      when: mongod_status.rc != 0
