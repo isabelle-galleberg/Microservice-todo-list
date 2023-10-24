@@ -94,6 +94,7 @@ async function removeFromDB(itemId) {
   try {
     await client.connect();
     const db = client.db('todo');
+    if (!db.collection('list')) db.createCollection('list');
     const collection = db.collection('list');
     const result = await collection.deleteOne({ _id: itemId });
     if (result.deletedCount === 1) {
