@@ -240,15 +240,10 @@
         src: '{{item}}'
         dest: /home/ubuntu/src/
       loop:
-        - /home/vagrant/project/microservices/frontend/static
         - /home/vagrant/project/microservices/frontend/src
+        - /home/vagrant/project/microservices/frontend/public
         - /home/vagrant/project/microservices/frontend/package.json
         - /home/vagrant/project/microservices/frontend/package-lock.json
-        - /home/vagrant/project/microservices/frontend/postcss.config.js
-        - /home/vagrant/project/microservices/frontend/svelte.config.js
-        - /home/vagrant/project/microservices/frontend/tailwind.config.js
-        - /home/vagrant/project/microservices/frontend/tsconfig.json
-        - /home/vagrant/project/microservices/frontend/vite.config.ts
 
     - name: Add balancer Ips
       template:
@@ -263,7 +258,7 @@
     - name: Start the application
       command:
         chdir: /home/ubuntu/src/
-        cmd: sudo npm run dev
+        cmd: HOST=0.0.0.0 npm run start
       async: 1000
       poll: 0
 
