@@ -38,12 +38,12 @@
   tasks:
     - name: Add mongo key
       apt_key:
-        url: https://www.mongodb.org/static/pgp/server-6.0.asc
+        url: https://www.mongodb.org/static/pgp/server-7.0.asc
         state: present
 
     - name: Add mongo repo
       apt_repository:
-        repo: 'deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse'
+        repo: 'deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse'
         state: present
         update_cache: yes
 
