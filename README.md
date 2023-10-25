@@ -13,7 +13,8 @@
 4. [Services](#services)
 5. [Build and Deploy](#build-and-deploy)
 6. [Demo](#demo)
-7. [License](#license)
+7. [Tools & Technologies](#tools--technologies)
+8. [License](#license)
 
 
 ## Application
@@ -21,14 +22,11 @@ Our application is a simple To-Do list, designed as a microservice-based contain
 
 1. **List service** - Handles adding/removing of items (Express.js)
 2. **Item service** - Manages checking/unchecking of items (Express.js)
-3. **Database service** - Backend service for storage and retrieval of To-Do list items (MongoDB).
-4. **Frontend service** - Visualization for our To-Do list connected to the Expressed API functions (Svelte).
+3. **Frontend service** - Visualization for our To-Do list connected to the Expressed API functions (Svelte).
 
 _Express.js_ is a REST API-based implementation which serves basic To-Do list functions as APIs. We have two Expressed services:
 1. **List service** - Adding/removing items to/from list
 2. **Item service** - Checking/unchecking an item
-
-_MongoDB_ serves as a backend service that handles the storage and retrieval of To-Do list items, provided to it via the Expressed APIs. 
 
 The frontend service is a frontend application designed in Svelte.js. It functions as the visualization for our To-Do list, and its functions add/remove items and check/uncheck items are served by the express.js services.
 
@@ -39,7 +37,6 @@ Here's a basic outline:
 
 1. **Frontend:** Developed in Svelte.js, providing a sleek, fast, and user-friendly interface.
 2. **Backend Services:** Consists of two Expressed services handling operations of our To-Do list.
-3. **Database:** MongoDB, responsible for persisting our list data.
 
 
 **Data flow:**
@@ -52,6 +49,9 @@ The complete architecture of this implementation is as follows:
 
 ![Architecture](./report/assets/architecture.png)
 WORKING: [DRAW.IO](https://drive.google.com/file/d/1YTpFg0gd-9eK2pGvSjLzb5hUPA-y5P1c/view?usp=share_link)
+- Usikker på portnr på HAProxy
+- Forklar replica set, 2 replicas
+- Forklar
 
 We chose to build our cluster using GKE. 
 
@@ -100,6 +100,8 @@ Environment Setup:
 2. Navigate to the **Google Compute Engine** and enable its API.
 3. Create a Service Account 
    - Dashboard -> IAM and Administrator -> Service Account -> Mange Keys -> Create A New Key -> Export JSON
+
+
 
 ### Configuration
 1. Clone the project repository to your local machine.
@@ -180,7 +182,13 @@ You input your task in the text prompt:
 
 Clicking "add" makes the new item appear in the list:
 
-
+## Tools & Technologies:
+- **Vagrant:** Used to automate the setup of our development environments, ensuring a uniform development platform across the team.
+- **Ansible:** IT automation tool that can be used to configure systems and deploy software. Standardizes our application's environment, guaranteeing consistent behaviour across all stages, from dev to prod.
+- **Terraform:** IaC tool which makes it easy to manage and deploy our infrastructure systematically and repeatably.
+- **Express.js:** A minimalist web framework for Node.js, which lets us build flexible backend services efficiently.
+- **MongoDB:** A NoSQL database that allows for a simple way to set up persistent storage in our application.
+- **Svelte:** A component framework that compiles components into efficient vanilla JavaScript at build time. Chosen due to team experience.
 
 ## License
 This project is licensed under the terms of the MIT license.
