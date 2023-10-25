@@ -71,6 +71,17 @@
         dest: /etc/mongod.conf
       notify: restart mongo
 
+      - name: copy db healthcheck script
+        copy:
+          src: /home/vagrant/project/gcp/scripts/healthcheck.sh
+          dest: /bin/healthcheck.sh
+
+      - name: Setup cronjob
+        cron:
+          name: healthcheck
+          minute: "*/1"
+          job: /bin/healthcheck.sh
+
     - name: Run mongod with all IPs bound
       systemd:
         name: mongod
