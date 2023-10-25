@@ -10,7 +10,7 @@
     # To operate remotely in critical files without direct user input
     - name: Remove require tty - alt
       lineinfile:
-        regexp: 'requiretty'
+        regexp: "requiretty"
         dest: /etc/sudoers.d/os_defaults
         state: absent
     # Giving permissions in sudoers for system critical files (see https://docs.ansible.com/ansible/latest/modules/lineinfile_module.html)
@@ -18,8 +18,8 @@
       lineinfile:
         dest: /etc/sudoers
         state: present
-        regexp: '^%ADMIN ALL='
-        line: '%ADMIN ALL=(ALL) NOPASSWD: ALL'
+        regexp: "^%ADMIN ALL="
+        line: "%ADMIN ALL=(ALL) NOPASSWD: ALL"
         validate: /usr/sbin/visudo -cf %s
     # Install the SSH key on servers
     - name: install ssh key
@@ -43,7 +43,7 @@
 
     - name: Add mongo repo
       apt_repository:
-        repo: 'deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse'
+        repo: "deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse"
         state: present
         update_cache: yes
 
@@ -104,17 +104,17 @@
   become: yes
   become_method: sudo
   vars:
-    NODEJS_VERSION: '18'
-    ansible_distribution_release: 'focal'
+    NODEJS_VERSION: "18"
+    ansible_distribution_release: "focal"
   tasks:
     - name: Install the gpg key for nodejs LTS
       apt_key:
-        url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
         state: present
 
     - name: Install the nodejs LTS repos
       apt_repository:
-        repo: 'deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main'
+        repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main"
         state: present
         update_cache: yes
 
@@ -143,7 +143,7 @@
 
     - name: Copy project code
       copy:
-        src: '{{item}}'
+        src: "{{item}}"
         dest: /home/ubuntu/src/
       loop:
         - /home/vagrant/project/microservices/itemservice/bin
@@ -190,7 +190,7 @@
 
     - name: Copy project code
       copy:
-        src: '{{item}}'
+        src: "{{item}}"
         dest: /home/ubuntu/src/
       loop:
         - /home/vagrant/project/microservices/listservice/bin
@@ -237,18 +237,13 @@
 
     - name: Copy project code
       copy:
-        src: '{{item}}'
+        src: "{{item}}"
         dest: /home/ubuntu/src/
       loop:
-        - /home/vagrant/project/microservices/frontend/static
         - /home/vagrant/project/microservices/frontend/src
+        - /home/vagrant/project/microservices/frontend/public
         - /home/vagrant/project/microservices/frontend/package.json
         - /home/vagrant/project/microservices/frontend/package-lock.json
-        - /home/vagrant/project/microservices/frontend/postcss.config.js
-        - /home/vagrant/project/microservices/frontend/svelte.config.js
-        - /home/vagrant/project/microservices/frontend/tailwind.config.js
-        - /home/vagrant/project/microservices/frontend/tsconfig.json
-        - /home/vagrant/project/microservices/frontend/vite.config.ts
 
     - name: Add balancer Ips
       template:
@@ -263,7 +258,7 @@
     - name: Start the application
       command:
         chdir: /home/ubuntu/src/
-        cmd: sudo npm run dev
+        cmd: HOST=0.0.0.0 npm run start
       async: 1000
       poll: 0
 
@@ -285,19 +280,19 @@
     - name: update /etc/hosts file for name resolution of self
       lineinfile:
         dest: /etc/hosts
-        regexp: '.*{{ item }}$'
-        line: '127.0.0.1 {{item}}'
+        regexp: ".*{{ item }}$"
+        line: "127.0.0.1 {{item}}"
         state: present
       with_items: balancer
     # as there is no internal DNS service, we need to populate the /etc/hosts
     - name: update /etc/hosts file for name resolution
       lineinfile:
         dest: /etc/hosts
-        regexp: '.*{{ item }}$'
+        regexp: ".*{{ item }}$"
         line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{item}}"
         state: present
       when: hostvars[item]['ansible_default_ipv4']['address'] is defined
-      with_items: '{{groups.servers}}'
+      with_items: "{{groups.servers}}"
 
     - name: add HAPROXY Repository
       apt_repository:
@@ -306,14 +301,14 @@
 
     - name: install haproxy and socat
       apt:
-        pkg: ['haproxy', 'socat']
+        pkg: ["haproxy", "socat"]
         state: latest
 
     - name: enable haproxy
       lineinfile:
         path: /etc/default/haproxy
-        regexp: '^ENABLED.+$'
-        line: 'ENABLED=1'
+        regexp: "^ENABLED.+$"
+        line: "ENABLED=1"
         state: present
 
   handlers:
