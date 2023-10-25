@@ -150,7 +150,6 @@
         - /home/vagrant/project/microservices/itemservice/routes
         - /home/vagrant/project/microservices/itemservice/app.js
         - /home/vagrant/project/microservices/itemservice/package.json
-        - /home/vagrant/project/microservices/itemservice/package-lock.json
 
     - name: Add database ips file
       template:
@@ -244,6 +243,7 @@
         - /home/vagrant/project/microservices/frontend/static
         - /home/vagrant/project/microservices/frontend/src
         - /home/vagrant/project/microservices/frontend/package.json
+        - /home/vagrant/project/microservices/frontend/package-lock.json
         - /home/vagrant/project/microservices/frontend/postcss.config.js
         - /home/vagrant/project/microservices/frontend/svelte.config.js
         - /home/vagrant/project/microservices/frontend/tailwind.config.js
