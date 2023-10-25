@@ -65,6 +65,22 @@
         group: mongodb
         mode: 0755
 
+    - name: Create /data/db/journal directory
+      file:
+        path: /data/db/journal
+        state: directory
+        owner: mongodb
+        group: mongodb
+        mode: 0755
+
+    - name: Create /data/db/WiredTiger.lock directory
+      file:
+        path: /data/db/WiredTiger.lock
+        state: directory
+        owner: mongodb
+        group: mongodb
+        mode: 0755
+
     - name: Copy config file
       copy:
         src: /home/vagrant/project/gcp/templates/mongod.conf
