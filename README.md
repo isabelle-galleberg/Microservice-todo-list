@@ -13,7 +13,8 @@
 4. [Services](#services)
 5. [Build and Deploy](#build-and-deploy)
 6. [Demo](#demo)
-7. [License](#license)
+7. [Tools & Technologies](#tools--technologies)
+8. [License](#license)
 
 
 ## Application
@@ -50,6 +51,7 @@ The complete architecture of this implementation is as follows:
 WORKING: [DRAW.IO](https://drive.google.com/file/d/1YTpFg0gd-9eK2pGvSjLzb5hUPA-y5P1c/view?usp=share_link)
 - Usikker på portnr på HAProxy
 - Forklar replica set, 2 replicas
+- Forklar
 
 We chose to build our cluster using GKE. 
 
@@ -180,7 +182,13 @@ You input your task in the text prompt:
 
 Clicking "add" makes the new item appear in the list:
 
-
+## Tools & Technologies:
+- **Vagrant:** Used to automate the setup of our development environments, ensuring a uniform development platform across the team.
+- **Ansible:** IT automation tool that can be used to configure systems and deploy software. Standardizes our application's environment, guaranteeing consistent behaviour across all stages, from dev to prod.
+- **Terraform:** IaC tool which makes it easy to manage and deploy our infrastructure systematically and repeatably.
+- **Express.js:** A minimalist web framework for Node.js, which lets us build flexible backend services efficiently.
+- **MongoDB:** A NoSQL database that allows for a simple way to set up persistent storage in our application.
+- **Svelte:** A component framework that compiles components into efficient vanilla JavaScript at build time. Chosen due to team experience.
 
 ## License
 This project is licensed under the terms of the MIT license.
