@@ -1,0 +1,48 @@
+# 2.1: itemservice
+- hosts: item
+  gather_facts: false
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Copy project code
+      copy:
+        src: '{{item}}'
+        dest: /home/ubuntu/src/
+      loop:
+        - /home/vagrant/project/microservices/itemservice/bin
+        - /home/vagrant/project/microservices/itemservice/routes
+        - /home/vagrant/project/microservices/itemservice/app.js
+
+# 2.2: listservice
+- hosts: list
+  gather_facts: false
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Copy project code
+      copy:
+        src: '{{item}}'
+        dest: /home/ubuntu/src/
+      loop:
+        - /home/vagrant/project/microservices/listservice/bin
+        - /home/vagrant/project/microservices/listservice/routes
+        - /home/vagrant/project/microservices/listservice/app.js
+
+# 2.3: frontend
+- hosts: frontend
+  gather_facts: false
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Copy project code
+      copy:
+        src: '{{item}}'
+        dest: /home/ubuntu/src/
+      loop:
+        - /home/vagrant/project/microservices/frontend/src
