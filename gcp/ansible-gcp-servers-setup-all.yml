@@ -38,12 +38,12 @@
   tasks:
     - name: Add mongo key
       apt_key:
-        url: https://www.mongodb.org/static/pgp/server-7.0.asc
+        url: https://www.mongodb.org/static/pgp/server-6.0.asc
         state: present
 
     - name: Add mongo repo
       apt_repository:
-        repo: 'deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse'
+        repo: 'deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse'
         state: present
         update_cache: yes
 
@@ -243,6 +243,7 @@
         - /home/vagrant/project/microservices/frontend/static
         - /home/vagrant/project/microservices/frontend/src
         - /home/vagrant/project/microservices/frontend/package.json
+        - /home/vagrant/project/microservices/frontend/package-lock.json
         - /home/vagrant/project/microservices/frontend/postcss.config.js
         - /home/vagrant/project/microservices/frontend/svelte.config.js
         - /home/vagrant/project/microservices/frontend/tailwind.config.js
@@ -532,20 +533,3 @@
         name: grafana-server
         enabled: yes
         state: started
-
-# Make sure mongodb is running
-- name: Check and Start MongoDB Service
-  hosts: database
-  become: yes
-
-  tasks:
-    - name: Check if MongoDB is running
-      shell: ps aux | grep mongod | grep -v grep
-      register: mongod_status
-      ignore_errors: yes
-
-    - name: Start MongoDB if not running
-      systemd:
-        name: mongod
-        state: started
-      when: mongod_status.rc != 0
