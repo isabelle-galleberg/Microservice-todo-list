@@ -1,4 +1,4 @@
-# Check if all node services are running their respective services
+---
 - name: Check and Restart item microservice
   hosts:
     - item
@@ -6,7 +6,7 @@
   become: yes
   tasks:
     - name: Check if Node.js service is running
-      command: ps aux | grep -v grep | grep -v node_exporter | grep node
+      shell: 'ps aux | grep -v grep | grep -v node_exporter | grep node'
       ignore_errors: yes
       register: service_status
 
@@ -22,8 +22,8 @@
   hosts: frontend
   become: yes
   tasks:
-        - name: Check if Node.js service is running
-      command: ps aux | grep -v grep | grep -v node_exporter | grep node
+    - name: Check if Node.js service is running
+      shell: 'ps aux | grep -v grep | grep -v node_exporter | grep node'
       ignore_errors: yes
       register: service_status
 
@@ -34,4 +34,3 @@
       async: 1000
       poll: 0
       when: service_status.rc != 0
-      
