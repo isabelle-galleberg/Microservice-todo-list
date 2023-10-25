@@ -164,15 +164,9 @@
     - name: Start the application
       command:
         chdir: /home/ubuntu/src/
-        cmd: sudo npm start
+        cmd: npm start
       async: 1000
       poll: 0
-
-    - name: Ensure app is running
-      shell: ps aux | grep node
-      register: app_status
-
-    - debug: msg={{app_status.stdout_lines}}-
 
 # 2.2: listservice
 - hosts: list
@@ -211,17 +205,11 @@
     - name: Start the application
       command:
         chdir: /home/ubuntu/src/
-        cmd: sudo npm start
+        cmd: npm start
       async: 1000
       poll: 0
 
-    - name: Ensure app is running
-      shell: ps aux | grep node
-      register: app_status
-
-    - debug: msg={{app_status.stdout_lines}}-
-
-# 2.3: frontend TODO!!!
+# 2.3: frontend
 - hosts: frontend
   gather_facts: true
   remote_user: ubuntu
@@ -258,15 +246,9 @@
     - name: Start the application
       command:
         chdir: /home/ubuntu/src/
-        cmd: HOST=0.0.0.0 npm run start
+        cmd: npm start
       async: 1000
       poll: 0
-
-    - name: Ensure app is running
-      shell: ps aux | grep node
-      register: app_status
-
-    - debug: msg={{app_status.stdout_lines}}-
 
 # Fourth: Install the required software in the Load Balancer
 - hosts: balancer
