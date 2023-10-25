@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router(); //to handle http routes
-const MongoClient = require('mongodb').MongoClient;
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
 const fs = require('fs');
-
-// Checks/unchecks todo item
 
 // Get database connection string
 function getMondoDBurl() {
@@ -17,14 +16,9 @@ function getMondoDBurl() {
 
 const url = getMondoDBurl();
 
-// Health check endpoint, checking that service is up
-router.get('/health', (req, res) => {
-  res.send();
-});
-
 // Toggle an item (check/uncheck depending on state)
 router.put('/toggle/:id', async (req, res) => {
-  const itemId = req.params.id;
+  const itemId = new mongo.ObjectId(req.params.id);
   const updatedTodo = req.body; // The updatedTodo object sent in the request body
 
   if (updatedTodo && typeof updatedTodo.completed === 'boolean') {
@@ -45,14 +39,14 @@ router.put('/toggle/:id', async (req, res) => {
 
 // Update item status in the database
 async function updateItemStatus(itemId, status) {
-  const client = new MongoClient(url, { useUnifiedTopology: true });
+  const client = new MongoClient(url);
 
   try {
     await client.connect();
     const db = client.db('todo');
     const collection = db.collection('list');
     const query = { _id: itemId };
-    const newValues = { $set: { checked: status } };
+    const newValues = { $set: { completed: status } };
     const result = await collection.updateOne(query, newValues);
 
     if (result.modifiedCount === 1) {
@@ -62,7 +56,6 @@ async function updateItemStatus(itemId, status) {
     }
   } catch (error) {
     console.error('Error updating item status:', error);
-    throw error;
   } finally {
     client.close();
   }
