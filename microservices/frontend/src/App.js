@@ -5,10 +5,10 @@ const TodoList = () => {
   const balancers = require('./microservices_balancers.json');
 
   // Possible improvement: Do this dynamically, so that it scales with the number of balancers and microservices
-  const list_url1 = `http://${balancers.balancer1}:6005`;
-  const list_url2 = `http://${balancers.balancer2}:6005`;
-  const item_url1 = `http://${balancers.balancer1}:6006`;
-  const item_url2 = `http://${balancers.balancer2}:6006`;
+  const list_url1 = `http://${balancers.balancer1}:24001`;
+  const list_url2 = `http://${balancers.balancer2}:24001`;
+  const item_url1 = `http://${balancers.balancer1}:24002`;
+  const item_url2 = `http://${balancers.balancer2}:24002`;
 
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');

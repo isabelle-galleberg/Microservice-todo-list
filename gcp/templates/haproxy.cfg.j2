@@ -47,12 +47,12 @@ frontend hafrontend
   default_backend webapp
 
 frontend halist
-  bind *:6005
+  bind *:24001
   mode http
   default_backend listservice
 
 frontend haitem
-  bind *:6006
+  bind *:24002
   mode http
   default_backend itemservice
 
