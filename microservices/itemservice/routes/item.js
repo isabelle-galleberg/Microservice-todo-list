@@ -3,7 +3,6 @@ const router = express.Router(); //to handle http routes
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
 const fs = require('fs');
-const Prometheus = require('prom-client');
 
 // Get database connection string
 function getMongoDBurl() {
