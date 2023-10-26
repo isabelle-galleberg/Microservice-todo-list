@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const MongoClient = require('mongodb').MongoClient;
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
 const fs = require('fs');
-
-// Adds/removes todo items from list, and fetches todo items from database to give to frontend service
 
 // Get database connection string
 function getConnectionString() {
@@ -16,12 +15,6 @@ function getConnectionString() {
 }
 
 const url = getConnectionString();
-console.log(url);
-
-// Health check endpoint
-router.get('/health', (req, res) => {
-  res.end();
-});
 
 // Fetch all todo list items
 router.get('/todos', async (req, res) => {
@@ -29,14 +22,13 @@ router.get('/todos', async (req, res) => {
     const todos = await fetchAllTodos();
     res.status(200).json(todos);
   } catch (error) {
-    console.error('Error fetching todos:', error);
     res.status(500).json({ status: 'Failed to fetch todos' }); // Return a 500 status code for a server error
   }
 });
 
 // Fetch items from database
 async function fetchAllTodos() {
-  const client = new MongoClient(url, { useUnifiedTopology: true });
+  const client = new MongoClient(url);
   try {
     await client.connect();
     const db = client.db('todo');
@@ -45,7 +37,6 @@ async function fetchAllTodos() {
     return todos;
   } catch (error) {
     console.error('Error fetching all todos:', error);
-    throw error;
   } finally {
     client.close();
   }
@@ -64,24 +55,23 @@ router.post('/add', (req, res) => {
 
 // Remove a todo list item
 router.delete('/:id', (req, res) => {
-  const itemId = req.params.id;
+  const itemId = new mongo.ObjectId(req.params.id);
+
   removeFromDB(itemId);
   res.status(204).json({ status: 'Item removed' }); // Return a 204 status code for a successful DELETE
 });
 
 // Insert item into database
 async function insertInDB(item) {
-  const client = new MongoClient(url, { useUnifiedTopology: true });
+  const client = new MongoClient(url);
 
   try {
     await client.connect();
     const db = client.db('todo');
     const collection = db.collection('list');
-    const result = await collection.insertOne(item);
-    return result.ops[0]; // Return the added item
+    await collection.insertOne(item);
   } catch (error) {
     console.error('Error inserting item:', error);
-    throw error;
   } finally {
     client.close();
   }
@@ -89,12 +79,11 @@ async function insertInDB(item) {
 
 // Remove item from the database
 async function removeFromDB(itemId) {
-  const client = new MongoClient(url, { useUnifiedTopology: true });
+  const client = new MongoClient(url);
 
   try {
     await client.connect();
     const db = client.db('todo');
-    if (!db.collection('list')) db.createCollection('list');
     const collection = db.collection('list');
     const result = await collection.deleteOne({ _id: itemId });
     if (result.deletedCount === 1) {
@@ -104,7 +93,6 @@ async function removeFromDB(itemId) {
     }
   } catch (error) {
     console.error('Error removing item:', error);
-    throw error;
   } finally {
     client.close();
   }
