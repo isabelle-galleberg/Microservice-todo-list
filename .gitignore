@@ -14,6 +14,7 @@ inventory
 # Authentication files
 agisit-2324-website-16-*
 id_rsa
+id_rsa.pub
 
 # Misc
 node_modules
