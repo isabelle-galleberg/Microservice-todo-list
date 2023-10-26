@@ -85,7 +85,7 @@ const TodoList = () => {
 
 	return (
 		<div className="p-4 flex flex-col items-center">
-			<h1 className="text-2xl font-semibold mb-4">To Do List</h1>
+			<h1 className="text-2xl font-semibold mb-4">To-do List</h1>
 			<div className="mb-4 max-w-sm flex flex-row gap-3 w-full">
 				<input
 					type="text"
