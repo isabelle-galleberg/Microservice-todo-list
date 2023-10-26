@@ -1,5 +1,5 @@
 ---
-- name: Check and Restart item microservice
+- name: Check and restart node microservices
   hosts:
     - item
     - list
