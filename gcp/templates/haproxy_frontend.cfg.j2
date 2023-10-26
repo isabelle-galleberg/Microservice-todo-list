@@ -44,12 +44,12 @@ defaults
 frontend hafrontend
   bind *:80
   mode http
-  default_backend habackend
+  default_backend webappbackend
 
 #---------------------------------------------------------------------
-# BackEnd roundrobin as balance algorithm
+# BackEnd Configuration
 #---------------------------------------------------------------------
-backend habackend
+backend webappbackend
   mode http
   balance roundrobin
   {% for host in groups['frontend'] %}
