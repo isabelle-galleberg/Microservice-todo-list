@@ -12,62 +12,86 @@
 
 1. [Application](#application)
 2. [Architecture](#architecture)
-3. [Services](#services)
+   1. [Application Flow](#application-flow)
+   2. [Components](#components)
+3. [Infrastructure](#infrastructure)
+   1. [Terraform](#terraform)
+   2. [Ansible](#ansible)
 4. [Build and Deploy](#build-and-deploy)
-5. [Demo](#demo)
-6. [Tools & Technologies](#tools--technologies)
-7. [License](#license)
+   1. [Prerequisites](#prerequisites)
+      1. [Tools/Software](#toolssoftware)
+      2. [Accounts](#accounts)
+   2. [Configuration](#configuration)
+   3. [Finishing and cleaning up](#finishing-and-cleaning-up)
+5. [Tools & Technologies](#tools--technologies)
+6. [License](#license)
 
 ## Application
 
-Our application is a simple To-Do list, designed as a microservice-based containerized web application. The core operations are served by microservices as follows:
+This project demonstrates how to deploy a microservices-based containerized web application on Google Cloud Platform (GCP) using Terraform as the Infrastructure as Code (IaC) tool, with Ansible to manage and provision the infrastructure resources.
+
+Our project goal was to build a resilient and scalable “To-do list” web application, offering monitoring capabilities for system performance and health. 
+
+
+The core operations are served by microservices as follows:
 
 1. **List service** - Handles adding/removing of items (Express.js)
 2. **Item service** - Manages checking/unchecking of items (Express.js)
-3. **Frontend service** - Visualization for our To-Do list connected to the Expressed API functions (Svelte).
+3. **Frontend service** - Visualization for our To-Do list connected to the Expressed API functions (React).
+As well as a monitoring server to allow basic performance monitoring. 
 
-_Express.js_ is a REST API-based implementation which serves basic To-Do list functions as APIs. We have two Expressed services:
 
-1. **List service** - Adding/removing items to/from list
-2. **Item service** - Checking/unchecking an item
+The enhanced solution for the project includes the addition of the following components:
+1. **Load balancers** (1 for frontend, 1 for each backend service)
+2. **Databases** (Replica set of three database servers)
 
-The frontend service is a frontend application designed in Svelte.js. It functions as the visualization for our To-Do list, and its functions add/remove items and check/uncheck items are served by the express.js services.
+Our application is a simple “To-do list”, where the user can add, remove, check and uncheck items in the list. The persistent storage of list items and their status is provided by a MongoDB database replica set. The database replica set also contributes to the availability of the service, together with the system load balancers which are implemented for the frontend and both the backend express.js microservices. 
 
 ## Architecture
 
-Our microservice-based architecture ensures scalability and performance.
-
-Here's a basic outline:
-
-1. **Frontend:** Developed in Svelte.js, providing a sleek, fast, and user-friendly interface.
-2. **Backend Services:** Consists of two Expressed services handling operations of our To-Do list.
-
-**Data flow:**
-
-1. Users interact with the Svelte frontend.
-2. Requests go through the Express.js services.
-3. Any data operation will then be persisted or retrieved from the database service.
-
-The complete architecture of this implementation is as follows:
-
+Our architecture can be visualized using the diagram below:
 ![Architecture](./assets/architecture.png)
+The main parts of our infrastructure can be described as follows:
+- Multiple instances of each node service (frontend, item, list) which are load balanced 
+- Multiple instances of frontend, list, and item services to ensure scalability.
+- A MongoDB database replica set for data storage, and several load balancers ensuring data integrity and availability.
+- A monitor using Prometheus and Grafana to oversee system health and performance.
 
+### Application Flow
+1. Users access the system through the React-based frontend.
+2. User requests are channeled via the HAProxy load balancer to ensure efficient distribution of requests and high availability.
+3. Depending on the type of request, it is routed to either the List or Item service.
+4. These services interact with the MongoDB database to fetch, modify, or store data.
 
-## Components
+### Components
 | Component                         | Language      | Port |Description                                                          |
 | ------------------------------- | ------------- | --|------------------------------------------------------------------- |
-| [frontend](/microservices/frontend/)    | Svelte      |5173  | Renders and displays a simple To Do list, with the option to input a new item, remove an item, or check/uncheck an item.  |
-| [itemservice](/microservices/itemservice/)  | Express.js |3000| Checks/unchecks items and stores status in users' To Do list in MongoDB. |
-| [listservice](/microservices/listservice/) | Express.js |3000| Adds and removes items from To Do list in MongoDB according to users' actions.   |
-| [database](/microservices/databaseservice/) | MongoDB |27017| Persistent storage for users' To Do list items. |
-| [load balancer](/gcp/monitoring/templates/) | HAProxy |80| Load balancing for different instances of the microservices (frontend, list and item). |
+| [frontend](/microservices/frontend/)    | React      |5173  | Frontend. Developed using React.js, offering a responsive and user-friendly “To-do” list interface to users.  |
+| [itemservice](/microservices/itemservice/)  | Express.js |3000| Backend. Developed in Express.js, responsible for the individual task-related operations of checking and unchecking items. |
+| [listservice](/microservices/listservice/) | Express.js |3000| Backend. Developed using Express.js, responsible for managing and handling the overall list operations of adding and removing items from the list.  |
+| [database](/microservices/databaseservice/) | MongoDB |27017| Provides persistent storage for the application, and ensures availability by being a replica set of three database servers. Using MongoDB. |
+| [load balancer](/gcp/monitoring/templates/) | HAProxy |80| Provided using HAProxy, ensures availability for our three microservices (frontend, list, item). |
+| [monitoring](/gcp/monitoring/) | Prometheus, Grafana |9090, 3000| Provided using Prometheus and Grafana |
 
-| Service                                            | Language   | Description                                                                                                              |
-| -------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [frontend](/microservices/frontend/)               | Svelte     | Renders and displays a simple To Do list, with the option to input a new item, remove an item, or check/uncheck an item. |
-| [itemservice](/microservices/itemservice/)         | Express.js | Checks/unchecks items and stores status in users' To Do list in MongoDB.                                                 |
-| [listservice](/microservices/listservice/)         | Express.js | Adds and removes items from To Do list in MongoDB according to users' actions.                                           |
-| [databaseservice](/microservices/databaseservice/) | MongoDB    | Persistent storage for users' To Do list items.                                                                          |
+## Infrastructure
+The backbone of our project is provided using Google Cloud Platform to host our servers as VMs. This allows for a simple and robust way to host our infrastructure, and provides easy integration with the other tools in use. 
+
+As mentioned, we chose to implement load balancers and database persistent storage as the advanced components for our project. These are important for ensuring high availability and fault tolerance in our system. 
+
+The infrastructure setup is done through the use of a combination of Terraform and Ansible. These allow for a simple and automated approach to setting up, configuring, and managing our cloud-based resources with an IaC approach. 
+
+### Terraform
+Terraform is an Infrastructure as Code (IaC) tool which allows us to manage infrastructure using configuration files. All infrastructure resources, from firewall rules to servers, are defined in Terraform files, which also ensure the resource deployment to GCP. 
+
+Here’s a breakdown of how Terraform is used in our system:
+1. **Resource creation:** Our infrastructure objects, like networks, VMs and firewalls, are all defined in Terraform files. 
+2. **Outputs:** Once the resources are created, Terraform provides an easy way to extract information on the created resources.
+
+### Ansible
+While Terraform creates the instructed resources and objects for our infrastructure, Ansible is used to provision and configure these resources. Ansible ensures that the servers are in the desired state, installs the necessary software, and sets up the required configurations. 
+
+This is all done during configuration, when running the ansible-playbook command described in the [Build and Deploy](#build-and-deploy) section of our README. 
+
 
 ## Build and Deploy
 
@@ -91,14 +115,15 @@ For, **macOs (Apple chips)**:
 
 #### Accounts:
 
-- **Google Cloud Platform (GCP)**: Ensure you have an active GCP account with billing enabled.
+- **Google Cloud Platform (GCP)**: Ensure you have an active GCP account with billing enabled, and an active GCP project.
 
 Environment Setup:
 
 1. Log in to Google Cloud Platform.
 2. Navigate to the **Google Compute Engine** and enable its API.
 3. Create a Service Account
-   - Dashboard -> IAM and Administrator -> Service Account -> Mange Keys -> Create A New Key -> Export JSON
+   - Dashboard -> IAM and Administrator -> Service Account -> Manage Keys -> Create A New Key -> Export JSON
+   - Save the JSON file to use in [Configuration](#configuration) step 3
 
 ### Configuration
 
@@ -174,30 +199,23 @@ ansible all -m ping
 ansible-playbook ansible-gcp-servers-setup-all.yml
 ```
 
-12. Outside the VM, change directory to the project folder, and run the python script to correctly configure the prometheus dashboard as follows:
+### Finishing and Cleaning Up
+
+When finished running, **Stop Terraform**, and **Stop the Virtual Machines**. 
+Stop Terraform using the following command: 
 
 ```
-python.exe ./gcp/populate_prometheus_ips.py
+terraform destroy
+terraform refresh
 ```
 
-### Finishing
-
-When finished running, **Stop the Virtual Machines** and verify the **global state** of all active Vagrant environments on the system, issuing the following commands:
+Stop and verify the **global state** of all active Vagrant environments on the system, with the following commands:
 
 ```
 vagrant halt
 vagrant global-status
 ```
 
-## Demo
-
-This is the landing page:
-![Photo of landing page](./assets/landingpage.png)
-
-You input your task in the text prompt:
-![Photo of text prompt](./assets/enterprompt.png)
-
-Clicking "add" makes the new item appear in the list:
 
 ## Tools & Technologies:
 
