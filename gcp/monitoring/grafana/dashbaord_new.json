@@ -11,7 +11,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "PBFE396EC0B189D67"
+                "uid": "RICK2324ROLLWEBSI"
             },
             "fieldConfig": {
                 "defaults": {
@@ -89,7 +89,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "PBFE396EC0B189D67"
+                        "uid": "RICK2324ROLLWEBSI"
                     },
                     "editorMode": "code",
                     "expr": "sum(rate(node_network_receive_bytes_total[1m])) by (instance)",
@@ -104,7 +104,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "PBFE396EC0B189D67"
+                "uid": "RICK2324ROLLWEBSI"
             },
             "fieldConfig": {
                 "defaults": {
@@ -182,7 +182,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "PBFE396EC0B189D67"
+                        "uid": "RICK2324ROLLWEBSI"
                     },
                     "editorMode": "code",
                     "expr": "sum(rate(service_errors_total[1m])) by (service, endpoint)",
@@ -197,7 +197,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "PBFE396EC0B189D67"
+                "uid": "RICK2324ROLLWEBSI"
             },
             "fieldConfig": {
                 "defaults": {
@@ -275,7 +275,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "PBFE396EC0B189D67"
+                        "uid": "RICK2324ROLLWEBSI"
                     },
                     "editorMode": "code",
                     "expr": "rate(node_cpu_seconds_total{mode=\"system\"}[1m])",
@@ -290,7 +290,7 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "PBFE396EC0B189D67"
+                "uid": "RICK2324ROLLWEBSI"
             },
             "fieldConfig": {
                 "defaults": {
@@ -368,7 +368,7 @@
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "PBFE396EC0B189D67"
+                        "uid": "RICK2324ROLLWEBSI"
                     },
                     "editorMode": "code",
                     "expr": "node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100",
