@@ -3,20 +3,6 @@ const router = express.Router();
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 const fs = require("fs");
-const Prometheus = require("prom-client"); // Import the Prometheus client
-
-// Prometheus error counter
-const errorCounter = new Prometheus.Counter({
-  name: "service_errors_total",
-  help: "Total number of errors occurred in the service",
-  labelNames: ["service", "endpoint", "error_type"],
-});
-
-// Register the metric with Prometheus
-Prometheus.register.registerMetric(errorCounter);
-
-/ Initialize the counter with a default value of 0 for specific labels
-errorCounter.inc({ service: "itemService", endpoint: "/todos", error_type: "FetchError" }, 0);
 
 // Get database connection string
 function getConnectionString() {
@@ -37,11 +23,6 @@ router.get("/todos", async (req, res) => {
     res.status(200).json(todos);
   } catch (error) {
     console.error("Error fetching todos:", error);
-    errorCounter.inc({
-      service: "listService",
-      endpoint: "/todos",
-      error_type: "FetchError",
-    });
     res.status(500).json({ status: "Failed to fetch todos" });
   }
 });
@@ -84,11 +65,6 @@ async function insertInDB(item) {
     await collection.insertOne(item);
   } catch (error) {
     console.error("Error adding item:", error);
-    errorCounter.inc({
-      service: "listService",
-      endpoint: "/add",
-      error_type: "AddError",
-    });
     res.status(500).json({ status: "Failed to add item" });
   } finally {
     client.close();
@@ -119,11 +95,6 @@ async function removeFromDB(itemId) {
     }
   } catch (error) {
     console.error("Error removing item:", error);
-    errorCounter.inc({
-      service: "listService",
-      endpoint: "/delete",
-      error_type: "DeleteError",
-    });
     res.status(500).json({ status: "Failed to remove item" });
   } finally {
     client.close();

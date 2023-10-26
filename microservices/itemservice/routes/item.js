@@ -5,19 +5,6 @@ const MongoClient = mongo.MongoClient;
 const fs = require('fs');
 const Prometheus = require('prom-client');
 
-// Prometheus error counter
-const errorCounter = new Prometheus.Counter({
-  name: 'service_errors_total',
-  help: 'Total number of errors occurred in the service',
-  labelNames: ['service', 'endpoint', 'error_type']
-});
-
-// Register the metric with Prometheus
-Prometheus.register.registerMetric(errorCounter);
-
-// Initialize the counter with a default value of 0 for specific labels
-errorCounter.inc({ service: "listService", endpoint: "/todos", error_type: "FetchError" }, 0);
-
 // Get database connection string
 function getMongoDBurl() {
   const data = fs.readFileSync('database_ips', 'utf8'); //! Requires the file database_ips to be set up with ips of our mongodb servers
@@ -46,7 +33,6 @@ router.put('/toggle/:id', async (req, res) => {
       res.status(200).json({ status: message, result });
     } catch (error) {
       console.error('Error toggling item:', error);
-      errorCounter.inc({ service: 'itemService', endpoint: '/toggle', error_type: 'ToggleError' });
       res.status(500).json({ error: 'Failed to toggle the item' });
     }
   } else {
@@ -73,7 +59,6 @@ async function updateItemStatus(itemId, status) {
     }
   } catch (error) {
     console.error('Error updating item status:', error);
-    errorCounter.inc({ service: 'itemService', endpoint: '/updateItemStatus', error_type: 'UpdateStatusError' });
   } finally {
     client.close();
   }

@@ -9,9 +9,4 @@ app.use(cors({ origin: '*' }));
 app.use(express.json()); // for parsing application/json
 app.use(listRoutes);
 
-app.get('/metrics', (req, res) => {
-    res.set('Content-Type', Prometheus.register.contentType);
-    res.end(Prometheus.register.metrics());
-});
-
 module.exports = { app };
