@@ -3,6 +3,14 @@ const router = express.Router();
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
 const fs = require('fs');
+const Prometheus = require('prom-client'); // Import the Prometheus client
+
+// Prometheus error counter
+const errorCounter = new Prometheus.Counter({
+  name: 'service_errors_total',
+  help: 'Total number of errors occurred in the service',
+  labelNames: ['service', 'endpoint', 'error_type']
+});
 
 // Get database connection string
 function getConnectionString() {
@@ -22,9 +30,10 @@ router.get('/todos', async (req, res) => {
     const todos = await fetchAllTodos();
     res.status(200).json(todos);
   } catch (error) {
-    res.status(500).json({ status: 'Failed to fetch todos' }); // Return a 500 status code for a server error
-  }
-});
+    console.error('Error fetching todos:', error);
+    errorCounter.inc({ service: 'listService', endpoint: '/todos', error_type: 'FetchError' });
+    res.status(500).json({ status: 'Failed to fetch todos' });
+  });
 
 // Fetch items from database
 async function fetchAllTodos() {
@@ -53,14 +62,6 @@ router.post('/add', (req, res) => {
   res.status(201).json({ status: 'Item added' }); // Return a 201 status code for a successful POST
 });
 
-// Remove a todo list item
-router.delete('/:id', (req, res) => {
-  const itemId = new mongo.ObjectId(req.params.id);
-
-  removeFromDB(itemId);
-  res.status(204).json({ status: 'Item removed' }); // Return a 204 status code for a successful DELETE
-});
-
 // Insert item into database
 async function insertInDB(item) {
   const client = new MongoClient(url);
@@ -71,11 +72,21 @@ async function insertInDB(item) {
     const collection = db.collection('list');
     await collection.insertOne(item);
   } catch (error) {
-    console.error('Error inserting item:', error);
+    console.error('Error adding item:', error);
+    errorCounter.inc({ service: 'listService', endpoint: '/add', error_type: 'AddError' });
+    res.status(500).json({ status: 'Failed to add item' });
   } finally {
     client.close();
   }
 }
+
+// Remove a todo list item
+router.delete('/:id', (req, res) => {
+  const itemId = new mongo.ObjectId(req.params.id);
+
+  removeFromDB(itemId);
+  res.status(204).json({ status: 'Item removed' }); // Return a 204 status code for a successful DELETE
+});
 
 // Remove item from the database
 async function removeFromDB(itemId) {
@@ -93,6 +104,8 @@ async function removeFromDB(itemId) {
     }
   } catch (error) {
     console.error('Error removing item:', error);
+    errorCounter.inc({ service: 'listService', endpoint: '/delete', error_type: 'DeleteError' });
+    res.status(500).json({ status: 'Failed to remove item' });
   } finally {
     client.close();
   }

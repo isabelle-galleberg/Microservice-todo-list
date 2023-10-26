@@ -185,8 +185,8 @@
                         "uid": "PBFE396EC0B189D67"
                     },
                     "editorMode": "code",
-                    "expr": "sum(rate(node_network_receive_bytes_total[1m])) by (instance)",
-                    "legendFormat": "__auto",
+                    "expr": "sum(rate(service_errors_total[1m])) by (service, endpoint)",
+                    "legendFormat": "Service: {{service}}, Endpoint: {{endpoint}}",
                     "range": true,
                     "refId": "A"
                 }
