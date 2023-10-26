@@ -68,99 +68,6 @@
 			},
 			"gridPos": {
 				"h": 9,
-				"w": 11,
-				"x": 0,
-				"y": 0
-			},
-			"id": 4,
-			"options": {
-				"legend": {
-					"calcs": [],
-					"displayMode": "list",
-					"placement": "bottom",
-					"showLegend": true
-				},
-				"tooltip": {
-					"mode": "multi",
-					"sort": "none"
-				}
-			},
-			"targets": [
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "RICK2324ROLLWEBSI"
-					},
-					"editorMode": "code",
-					"expr": "sum by (instance) (node_filesystem_avail_bytes)",
-					"legendFormat": "__auto",
-					"range": true,
-					"refId": "A"
-				}
-			],
-			"title": "Filesystem Space Available to Non-root Users",
-			"type": "timeseries"
-		},
-		{
-			"datasource": {
-				"type": "prometheus",
-				"uid": "RICK2324ROLLWEBSI"
-			},
-			"fieldConfig": {
-				"defaults": {
-					"color": {
-						"mode": "palette-classic"
-					},
-					"custom": {
-						"axisCenteredZero": false,
-						"axisColorMode": "text",
-						"axisLabel": "",
-						"axisPlacement": "auto",
-						"barAlignment": 0,
-						"drawStyle": "line",
-						"fillOpacity": 0,
-						"gradientMode": "none",
-						"hideFrom": {
-							"legend": false,
-							"tooltip": false,
-							"viz": false
-						},
-						"lineInterpolation": "linear",
-						"lineWidth": 1,
-						"pointSize": 5,
-						"scaleDistribution": {
-							"type": "linear"
-						},
-						"showPoints": "auto",
-						"spanNulls": false,
-						"stacking": {
-							"group": "A",
-							"mode": "none"
-						},
-						"thresholdsStyle": {
-							"mode": "off"
-						}
-					},
-					"mappings": [],
-					"thresholds": {
-						"mode": "absolute",
-						"steps": [
-							{
-								"color": "green",
-								"value": null
-							},
-							{
-								"color": "red",
-								"value": 80
-							}
-						]
-					},
-					"unit": "bytes"
-				},
-				"overrides": []
-			},
-			"gridPos": {
-				"h": 9,
 				"w": 13,
 				"x": 11,
 				"y": 0
@@ -186,105 +93,12 @@
 					},
 					"editorMode": "code",
 					"expr": "sum(rate(node_network_receive_bytes_total[1m])) by (instance)",
-					"legendFormat": "__auto",
+					"legendFormat": "{{instance}}",
 					"range": true,
 					"refId": "A"
 				}
 			],
-			"title": "Average Network Traffic Received",
-			"type": "timeseries"
-		},
-		{
-			"datasource": {
-				"type": "prometheus",
-				"uid": "RICK2324ROLLWEBSI"
-			},
-			"fieldConfig": {
-				"defaults": {
-					"color": {
-						"mode": "palette-classic"
-					},
-					"custom": {
-						"axisCenteredZero": false,
-						"axisColorMode": "text",
-						"axisLabel": "",
-						"axisPlacement": "auto",
-						"barAlignment": 0,
-						"drawStyle": "line",
-						"fillOpacity": 0,
-						"gradientMode": "none",
-						"hideFrom": {
-							"legend": false,
-							"tooltip": false,
-							"viz": false
-						},
-						"lineInterpolation": "linear",
-						"lineWidth": 1,
-						"pointSize": 5,
-						"scaleDistribution": {
-							"type": "linear"
-						},
-						"showPoints": "auto",
-						"spanNulls": false,
-						"stacking": {
-							"group": "A",
-							"mode": "none"
-						},
-						"thresholdsStyle": {
-							"mode": "off"
-						}
-					},
-					"mappings": [],
-					"thresholds": {
-						"mode": "absolute",
-						"steps": [
-							{
-								"color": "green",
-								"value": null
-							},
-							{
-								"color": "red",
-								"value": 80
-							}
-						]
-					},
-					"unit": "s"
-				},
-				"overrides": []
-			},
-			"gridPos": {
-				"h": 10,
-				"w": 11,
-				"x": 0,
-				"y": 9
-			},
-			"id": 2,
-			"options": {
-				"legend": {
-					"calcs": [],
-					"displayMode": "list",
-					"placement": "bottom",
-					"showLegend": true
-				},
-				"tooltip": {
-					"mode": "multi",
-					"sort": "none"
-				}
-			},
-			"targets": [
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "RICK2324ROLLWEBSI"
-					},
-					"editorMode": "code",
-					"expr": "rate(node_cpu_seconds_total{mode=\"system\"}[1m])",
-					"legendFormat": "__auto",
-					"range": true,
-					"refId": "A"
-				}
-			],
-			"title": "Average Amount of CPU Time Spent in System Mode",
+			"title": "Average Network Traffic per Component",
 			"type": "timeseries"
 		},
 		{
@@ -371,13 +185,13 @@
 						"uid": "RICK2324ROLLWEBSI"
 					},
 					"editorMode": "code",
-					"expr": "node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100",
-					"legendFormat": "__auto",
+					"expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
+					"legendFormat": "{{instance}}",
 					"range": true,
 					"refId": "A"
 				}
 			],
-			"title": "Amount of Available Memory",
+			"title": "Memory Utilization",
 			"type": "timeseries"
 		}
 	],

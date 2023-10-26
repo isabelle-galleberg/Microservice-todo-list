@@ -5,10 +5,10 @@ const TodoList = () => {
   const balancers = require('./microservices_balancers.json');
 
   // Possible improvement: Do this dynamically, so that it scales with the number of balancers and microservices
-  const list_url1 = `http://${balancers.balancer1}:2600`;
-  const list_url2 = `http://${balancers.balancer2}:2600`;
-  const item_url1 = `http://${balancers.balancer1}:2601`;
-  const item_url2 = `http://${balancers.balancer2}:2601`;
+  const list_url1 = `http://${balancers.balancer1}:24001`;
+  const list_url2 = `http://${balancers.balancer2}:24001`;
+  const item_url1 = `http://${balancers.balancer1}:24002`;
+  const item_url2 = `http://${balancers.balancer2}:24002`;
 
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
@@ -76,7 +76,7 @@ const TodoList = () => {
         getTodos();
       } else {
         if (url === list_url1) {
-          deleteTodo2(id, list_url2);
+          deleteTodo(id, list_url2);
         } else {
           console.error(
             'Failed to delete the todo. Status code: ',
@@ -86,7 +86,7 @@ const TodoList = () => {
       }
     } catch (error) {
       if (url === list_url1) {
-        deleteTodo2(id, list_url2);
+        deleteTodo(id, list_url2);
       } else {
         console.error('Error deleting the todo:', error);
       }
@@ -106,7 +106,7 @@ const TodoList = () => {
       }
     } catch (error) {
       if (url === item_url1) {
-        toggleTodo2(id, updatedTodo, item_url2);
+        toggleTodo(id, updatedTodo, item_url2);
       } else {
         console.error('Error updating the todo:', error);
       }
@@ -125,7 +125,7 @@ const TodoList = () => {
           onChange={(e) => setNewTodo(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && addTodo()}
         />
-        <button onClick={addTodo} className='btn btn-info'>
+        <button onClick={() => addTodo()} className='btn btn-info'>
           Add
         </button>
       </div>

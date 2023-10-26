@@ -17,7 +17,10 @@ function getMongoDBurl() {
 
 const url = getMongoDBurl();
 
-
+// Health check for balancing purposes
+router.get('/health', (req, res) => {
+  res.end();
+});
 
 // Toggle an item (check/uncheck depending on state)
 router.put('/toggle/:id', async (req, res) => {
