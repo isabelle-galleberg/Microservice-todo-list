@@ -1,11 +1,16 @@
-.vagrant
-Vagrantfile
-.terraform*
-inventory
-*.tfstate*
-agisit-2324-website-16-*
+# Hidden folders
 .DS_Store
-id_rsa
-Desktop.ini
 .vscode
 .idea
+.vagrant
+.terraform*
+Desktop.ini
+
+# Vagrant and terraform stuff
+Vagrantfile
+inventory
+*.tfstate*
+
+# Authentication files
+agisit-2324-website-16-*
+id_rsa
