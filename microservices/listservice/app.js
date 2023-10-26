@@ -1,7 +1,6 @@
 const express = require('express');
 const listRoutes = require('./routes/list');
 const cors = require('cors');
-const Prometheus = require('prom-client');
 
 const app = express();
 

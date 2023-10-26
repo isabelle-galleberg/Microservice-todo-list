@@ -4,11 +4,8 @@ import axios from 'axios';
 const TodoList = () => {
   const balancers = require('./microservices_balancers.json');
 
-  // Possible improvement: Do this dynamically, so that it scales with the number of balancers and microservices
-  const list_url1 = `http://${balancers.balancer1}:24001`;
-  const list_url2 = `http://${balancers.balancer2}:24001`;
-  const item_url1 = `http://${balancers.balancer1}:24002`;
-  const item_url2 = `http://${balancers.balancer2}:24002`;
+  const list_url = `http://${balancers.lists}:80`;
+  const item_url = `http://${balancers.items}:80`;
 
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
@@ -21,33 +18,22 @@ const TodoList = () => {
     console.log(todos);
   }, [todos]);
 
-  const getTodos = async (url = list_url1) => {
+  const getTodos = async () => {
     try {
-      const response = await axios.get(`${url}/todos`);
+      const response = await axios.get(`${list_url}/todos`);
       if (response.status === 200) {
         setTodos(response.data.reverse());
       } else {
-        if (url === list_url1) {
-          getTodos(list_url2);
-        } else {
-          console.error(
-            'Failed to fetch todos. Status code: ',
-            response.status
-          );
-        }
+        console.error('Failed to fetch todos. Status code: ', response.status);
       }
     } catch (error) {
-      if (url === list_url1) {
-        getTodos(list_url2);
-      } else {
-        console.error('Error fetching todos:', error);
-      }
+      console.error('Error fetching todos:', error);
     }
   };
 
-  const addTodo = async (url = list_url1) => {
+  const addTodo = async () => {
     try {
-      const response = await axios.post(`${url}/add`, {
+      const response = await axios.post(`${list_url}/add`, {
         text: newTodo,
         completed: false,
       });
@@ -61,41 +47,29 @@ const TodoList = () => {
         );
       }
     } catch (error) {
-      if (url === list_url1) {
-        addTodo(list_url2);
-      } else {
-        console.error('Error posting a new todo:', error);
-      }
+      console.error('Error posting a new todo:', error);
     }
   };
 
-  const deleteTodo = async (id, url = list_url1) => {
+  const deleteTodo = async (id) => {
     try {
-      const response = await axios.delete(`${url}/${id._id}`);
+      const response = await axios.delete(`${list_url}/${id._id}`);
       if (response.status === 204) {
         getTodos();
       } else {
-        if (url === list_url1) {
-          deleteTodo(id, list_url2);
-        } else {
-          console.error(
-            'Failed to delete the todo. Status code: ',
-            response.status
-          );
-        }
+        console.error(
+          'Failed to delete the todo. Status code: ',
+          response.status
+        );
       }
     } catch (error) {
-      if (url === list_url1) {
-        deleteTodo(id, list_url2);
-      } else {
-        console.error('Error deleting the todo:', error);
-      }
+      console.error('Error deleting the todo:', error);
     }
   };
 
-  const toggleTodo = async (id, updatedTodo, url = item_url1) => {
+  const toggleTodo = async (id, updatedTodo) => {
     try {
-      const response = await axios.put(`${url}/toggle/${id}`, updatedTodo);
+      const response = await axios.put(`${item_url}/toggle/${id}`, updatedTodo);
       if (response.status === 200) {
         getTodos();
       } else {
@@ -105,11 +79,7 @@ const TodoList = () => {
         );
       }
     } catch (error) {
-      if (url === item_url1) {
-        toggleTodo(id, updatedTodo, item_url2);
-      } else {
-        console.error('Error updating the todo:', error);
-      }
+      console.error('Error updating the todo:', error);
     }
   };
 
@@ -125,7 +95,7 @@ const TodoList = () => {
           onChange={(e) => setNewTodo(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && addTodo()}
         />
-        <button onClick={() => addTodo()} className='btn btn-info'>
+        <button onClick={addTodo} className='btn btn-info'>
           Add
         </button>
       </div>
