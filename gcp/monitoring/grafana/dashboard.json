@@ -68,8 +68,8 @@
 			},
 			"gridPos": {
 				"h": 9,
-				"w": 13,
-				"x": 11,
+				"w": 11,
+				"x": 0,
 				"y": 0
 			},
 			"id": 6,
@@ -160,10 +160,10 @@
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 10,
+				"h": 9,
 				"w": 13,
 				"x": 11,
-				"y": 9
+				"y": 0
 			},
 			"id": 8,
 			"options": {
@@ -194,99 +194,6 @@
 			"title": "Memory Utilization",
 			"type": "timeseries"
 		},
-		{
-			"datasource": {
-				"type": "prometheus",
-				"uid": "RICK2324ROLLWEBSI"
-			},
-			"fieldConfig": {
-				"defaults": {
-					"color": {
-						"mode": "palette-classic"
-					},
-					"custom": {
-						"axisCenteredZero": false,
-						"axisColorMode": "text",
-						"axisLabel": "",
-						"axisPlacement": "auto",
-						"barAlignment": 0,
-						"drawStyle": "line",
-						"fillOpacity": 0,
-						"gradientMode": "none",
-						"hideFrom": {
-							"legend": false,
-							"tooltip": false,
-							"viz": false
-						},
-						"lineInterpolation": "linear",
-						"lineWidth": 1,
-						"pointSize": 5,
-						"scaleDistribution": {
-							"type": "linear"
-						},
-						"showPoints": "auto",
-						"spanNulls": false,
-						"stacking": {
-							"group": "A",
-							"mode": "none"
-						},
-						"thresholdsStyle": {
-							"mode": "off"
-						}
-					},
-					"mappings": [],
-					"thresholds": {
-						"mode": "absolute",
-						"steps": [
-							{
-								"color": "green",
-								"value": null
-							},
-							{
-								"color": "red",
-								"value": 80
-							}
-						]
-					},
-					"unit": "percent"
-				},
-				"overrides": []
-			},
-			"gridPos": {
-				"h": 10,
-				"w": 13,
-				"x": 11,
-				"y": 9
-			},
-			"id": 8,
-			"options": {
-				"legend": {
-					"calcs": [],
-					"displayMode": "list",
-					"placement": "bottom",
-					"showLegend": true
-				},
-				"tooltip": {
-					"mode": "multi",
-					"sort": "none"
-				}
-			},
-			"targets": [
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "RICK2324ROLLWEBSI"
-					},
-					"editorMode": "code",
-					"expr": "node_filesystem_used_bytes{mountpoint=\"/path_to_your_database_storage\"}",
-					"legendFormat": "__auto",
-					"range": true,
-					"refId": "A"
-				}
-			],
-			"title": "Database Disk Space Usage",
-			"type": "timeseries"
-		}
 	],
 	"refresh": "5s",
 	"schemaVersion": 37,
