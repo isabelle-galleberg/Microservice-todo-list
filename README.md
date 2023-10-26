@@ -225,6 +225,3 @@ vagrant global-status
 - **MongoDB:** A NoSQL database that allows for a simple way to set up persistent storage in our application.
 - **React:** A javaScript component framework. Chosen due to team experience.
 
-## License
-
-This project is licensed under the terms of the MIT license.
