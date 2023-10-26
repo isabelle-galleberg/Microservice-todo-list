@@ -48,33 +48,16 @@ Here's a basic outline:
 The complete architecture of this implementation is as follows:
 
 ![Architecture](./report/assets/architecture.png)
-WORKING: [DRAW.IO](https://drive.google.com/file/d/1YTpFg0gd-9eK2pGvSjLzb5hUPA-y5P1c/view?usp=share_link)
-- Usikker på portnr på HAProxy
-- Forklar replica set, 2 replicas
-- Forklar
-
-We chose to build our cluster using GKE. 
-
-The various microservices are deployed at the following addresses inside the cluster:
-|Service       |Cluster Address       |Cluster Port       |API endpoint       |
-|  ----------  |  ------------------  |  ---------------  |  ---------------  |
-|List          |       |       |       |
-|Item          |       |       |       |
-|Database      |       |       |       |
-|Frontend      |       |       |       |
-|Loadbalancer  |       |       |       |
-|Dashboard     |       |       |       |
 
 
-
-
-## Services
-| Service                         | Language      |Description                                                          |
-| ------------------------------- | ------------- | ------------------------------------------------------------------- |
-| [frontend](/microservices/frontend/)    | Svelte        | Renders and displays a simple To Do list, with the option to input a new item, remove an item, or check/uncheck an item.  |
-| [itemservice](/microservices/itemservice/)  | Express.js | Checks/unchecks items and stores status in users' To Do list in MongoDB. |
-| [listservice](/microservices/listservice/) | Express.js | Adds and removes items from To Do list in MongoDB according to users' actions.   |
-| [databaseservice](/microservices/databaseservice/) | MongoDB | Persistent storage for users' To Do list items. |
+## Components
+| Component                         | Language      | Port |Description                                                          |
+| ------------------------------- | ------------- | --|------------------------------------------------------------------- |
+| [frontend](/microservices/frontend/)    | Svelte      |5173  | Renders and displays a simple To Do list, with the option to input a new item, remove an item, or check/uncheck an item.  |
+| [itemservice](/microservices/itemservice/)  | Express.js |3000| Checks/unchecks items and stores status in users' To Do list in MongoDB. |
+| [listservice](/microservices/listservice/) | Express.js |3000| Adds and removes items from To Do list in MongoDB according to users' actions.   |
+| [database](/microservices/databaseservice/) | MongoDB |27017| Persistent storage for users' To Do list items. |
+| [load balancer](/gcp/monitoring/templates/) | HAProxy |80| Load balancing for different instances of the microservices (frontend, list and item). |
 
 
 ## Build and Deploy
@@ -82,7 +65,8 @@ The various microservices are deployed at the following addresses inside the clu
 #### Tools/Software:
 1. **Vagrant:** Download [here](https://developer.hashicorp.com/vagrant/downloads)
 2. **Terraform:** Download [here](https://developer.hashicorp.com/terraform/downloads)
-3. Shell environment with **gcloud**, **git** and **kubectl**
+3. Shell environment with **gcloud** and **git** 
+4. A Python installation with Jinja2 and re packages?
 
 Additionally, for **Windows**, **macOS (Intel)** and **Linux**:
 1. **VirtualBox:** Download [here](https://www.virtualbox.org/wiki/Downloads)
@@ -159,9 +143,16 @@ To check the configurations, you can then run:
 terraform output
 ansible all -m ping
 ```
+
 11. Finally, after checking that configuration is working as intended, **in the same folder in the VM**, run:
 ```
 ansible-playbook ansible-gcp-servers-setup-all.yml
+```
+
+12. Outside the VM, change directory to the project folder, and run the python script to correctly configure the prometheus dashboard as follows:
+
+```
+python.exe ./gcp/populate_prometheus_ips.py
 ```
 
 ### Finishing
@@ -188,7 +179,7 @@ Clicking "add" makes the new item appear in the list:
 - **Terraform:** IaC tool which makes it easy to manage and deploy our infrastructure systematically and repeatably.
 - **Express.js:** A minimalist web framework for Node.js, which lets us build flexible backend services efficiently.
 - **MongoDB:** A NoSQL database that allows for a simple way to set up persistent storage in our application.
-- **Svelte:** A component framework that compiles components into efficient vanilla JavaScript at build time. Chosen due to team experience.
+- **React:** A javaScript component framework. Chosen due to team experience.
 
 ## License
 This project is licensed under the terms of the MIT license.
