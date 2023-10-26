@@ -1,4 +1,4 @@
 {
-    "items": "{{ hostvars['balancer3'].ansible_host }}",
-    "lists": "{{ hostvars['balancer2'].ansible_host }}"
+    "balancer1": "{{ hostvars['balancer2'].ansible_host }}",
+    "balancer2": "{{ hostvars['balancer3'].ansible_host }}"
 }
