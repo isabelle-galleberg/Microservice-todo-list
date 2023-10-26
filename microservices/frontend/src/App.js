@@ -4,6 +4,7 @@ import axios from 'axios';
 const TodoList = () => {
   const balancers = require('./microservices_balancers.json');
 
+  // Possible improvement: Do this dynamically, so that it scales with the number of balancers and microservices
   const list_url1 = `http://${balancers.balancer1}:2600`;
   const list_url2 = `http://${balancers.balancer2}:2600`;
   const item_url1 = `http://${balancers.balancer1}:2601`;
@@ -20,22 +21,33 @@ const TodoList = () => {
     console.log(todos);
   }, [todos]);
 
-  const getTodos = async () => {
+  const getTodos = async (url = list_url1) => {
     try {
-      const response = await axios.get(`${list_url1}/todos`);
+      const response = await axios.get(`${url}/todos`);
       if (response.status === 200) {
         setTodos(response.data.reverse());
       } else {
-        console.error('Failed to fetch todos. Status code: ', response.status);
+        if (url === list_url1) {
+          getTodos(list_url2);
+        } else {
+          console.error(
+            'Failed to fetch todos. Status code: ',
+            response.status
+          );
+        }
       }
     } catch (error) {
-      console.error('Error fetching todos:', error);
+      if (url === list_url1) {
+        getTodos(list_url2);
+      } else {
+        console.error('Error fetching todos:', error);
+      }
     }
   };
 
-  const addTodo = async () => {
+  const addTodo = async (url = list_url1) => {
     try {
-      const response = await axios.post(`${list_url1}/add`, {
+      const response = await axios.post(`${url}/add`, {
         text: newTodo,
         completed: false,
       });
@@ -49,32 +61,41 @@ const TodoList = () => {
         );
       }
     } catch (error) {
-      console.error('Error posting a new todo:', error);
+      if (url === list_url1) {
+        addTodo(list_url2);
+      } else {
+        console.error('Error posting a new todo:', error);
+      }
     }
   };
 
-  const deleteTodo = async (id) => {
+  const deleteTodo = async (id, url = list_url1) => {
     try {
-      const response = await axios.delete(`${list_url1}/${id._id}`);
+      const response = await axios.delete(`${url}/${id._id}`);
       if (response.status === 204) {
         getTodos();
       } else {
-        console.error(
-          'Failed to delete the todo. Status code: ',
-          response.status
-        );
+        if (url === list_url1) {
+          deleteTodo2(id, list_url2);
+        } else {
+          console.error(
+            'Failed to delete the todo. Status code: ',
+            response.status
+          );
+        }
       }
     } catch (error) {
-      console.error('Error deleting the todo:', error);
+      if (url === list_url1) {
+        deleteTodo2(id, list_url2);
+      } else {
+        console.error('Error deleting the todo:', error);
+      }
     }
   };
 
-  const toggleTodo = async (id, updatedTodo) => {
+  const toggleTodo = async (id, updatedTodo, url = item_url1) => {
     try {
-      const response = await axios.put(
-        `${item_url1}/toggle/${id}`,
-        updatedTodo
-      );
+      const response = await axios.put(`${url}/toggle/${id}`, updatedTodo);
       if (response.status === 200) {
         getTodos();
       } else {
@@ -84,7 +105,11 @@ const TodoList = () => {
         );
       }
     } catch (error) {
-      console.error('Error updating the todo:', error);
+      if (url === item_url1) {
+        toggleTodo2(id, updatedTodo, item_url2);
+      } else {
+        console.error('Error updating the todo:', error);
+      }
     }
   };
 
