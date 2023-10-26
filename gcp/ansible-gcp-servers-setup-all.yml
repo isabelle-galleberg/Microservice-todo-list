@@ -292,8 +292,8 @@
         name: haproxy
         state: restarted
 
-# 4.1: frontend balancer
-- hosts: balancer1
+# 4.1: Install config file
+- hosts: balancer
   remote_user: ubuntu
   become: yes
   become_method: sudo
@@ -301,7 +301,7 @@
   tasks:
     - name: deploy haproxy config
       template:
-        src: /home/vagrant/project/gcp/templates/haproxy_frontend.cfg.j2
+        src: /home/vagrant/project/gcp/templates/haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
         mode: 0644
         validate: haproxy -f %s -c -q
@@ -313,48 +313,7 @@
         name: haproxy
         state: restarted
 
-# 4.2: listservice balancer
-- hosts: balancer2
-  remote_user: ubuntu
-  become: yes
-  become_method: sudo
-
-  tasks:
-    - name: deploy haproxy config
-      template:
-        src: /home/vagrant/project/gcp/templates/haproxy_lists.cfg.j2
-        dest: /etc/haproxy/haproxy.cfg
-        mode: 0644
-        validate: haproxy -f %s -c -q
-      notify: restart haproxy
-
-  handlers:
-    - name: restart haproxy
-      service:
-        name: haproxy
-        state: restarted
-
-# 4.3: itemservice balancer
-- hosts: balancer3
-  remote_user: ubuntu
-  become: yes
-  become_method: sudo
-
-  tasks:
-    - name: deploy haproxy config
-      template:
-        src: /home/vagrant/project/gcp/templates/haproxy_items.cfg.j2
-        dest: /etc/haproxy/haproxy.cfg
-        mode: 0644
-        validate: haproxy -f %s -c -q
-      notify: restart haproxy
-
-  handlers:
-    - name: restart haproxy
-      service:
-        name: haproxy
-        state: restarted
-
+# 4.2: Ensure HAProxy is started and enabled on boot.
 - hosts: balancer
   remote_user: ubuntu
   become: yes
