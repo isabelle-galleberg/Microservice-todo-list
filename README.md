@@ -100,9 +100,7 @@ This is all done during configuration, when running the ansible-playbook command
 #### Tools/Software:
 
 1. **Vagrant:** Download [here](https://developer.hashicorp.com/vagrant/downloads)
-2. **Terraform:** Download [here](https://developer.hashicorp.com/terraform/downloads)
-3. Shell environment with **gcloud** and **git** 
-4. A Python installation with Jinja2 and re packages?
+2. Shell environment with **git** 
 
 Additionally, for **Windows**, **macOS (Intel)** and **Linux**:
 
@@ -123,29 +121,33 @@ Environment Setup:
 2. Navigate to the **Google Compute Engine** and enable its API.
 3. Create a Service Account
    - Dashboard -> IAM and Administrator -> Service Account -> Manage Keys -> Create A New Key -> Export JSON
-   - Save the JSON file to use in [Configuration](#configuration) step 3
+   - Save the JSON file to use in the [Configuration](#configuration) steps
 
 ### Configuration
 
-1. Clone the project repository to your local machine.
+1. Open a shell environment, and clone the project repository to your local machine.
 
 ```
 git clone https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit23-g16.git
 ```
 
-2. Navigate to the root directory of the project
+2. Navigate to the root directory of the project.
 
 ```
 cd agisit23-g16
 ```
 
-3. Upload the [exported GCP Service Account](#accounts) **'.json'** key to the **'gcpcloud'** files directory.
+3. Upload the [exported GCP Service Account](#accounts) **'.json'** key to the **'gcp'** files directory.
 
-4. Navigate to the gcpcloud folder and open the file **'terraform-gcp-variables.tf'**.
+4. Navigate to the **gcp folder**. You will here need to replace the placeholder values with the specific values for your project in the three following files:
 
-5. Replace the placeholder values with your specific GCP configurations.
+   1. Open the file **'terraform-gcp-variables.tf'**, and update the **GCP_PROJECT_ID** with the correct ID for your GCP project.
 
-6. The project contains two **Vagrantfiles**: One _Vagrantfile.docker_, and one _Vagrantfile.vbox_. Rename the one you will use to just **"Vagrantfile"**.
+   2. Open **'terraform-gcp-provider.tf'** and insert the correct path for your **.json** key for **"credentials"**.
+
+   3. Open **'ansible-load-credentials.sh'**, and update the path for the **.json** file here as well, for the **GCE_PEM_FILE_PATH**. 
+
+5. The project contains two **Vagrantfiles**: One _Vagrantfile.docker_, and one _Vagrantfile.vbox_. Rename the one you will use to just **"Vagrantfile"**.
    - If you installed **vbox** previously, use **Vagrantfile.vbox** -> **Vagrantfile**
    - If you installed **docker** previously, use **Vagrantfile.docker** -> **Vagrantfile**
 
@@ -155,14 +157,14 @@ Validate your Vagrantfile before proceeding, using the command:
 vagrant validate
 ```
 
-7. In the root directory of the project, run the following commands:
+6. In the root directory of the project, run the following commands:
 
 ```
 vagrant up
 vagrant ssh mgmt
 ```
 
-8. **In the mgmt virtual machine**, generate an ssh key by running the following command:
+7. **In the mgmt virtual machine**, navigate to the **gcp folder**, and generate an ssh key by running the following command:
 
 ```
 ssh-keygen -t rsa -b 2048
@@ -170,39 +172,36 @@ ssh-keygen -t rsa -b 2048
 
 Hit enter to all prompts, and do not enter a password.
 
-9. To deploy the local RSA key pair for the vagrant user, we run the following command:
-
-```
-ssh-addkey.yml --ask-pass
-```
-
-The password to use here is **vagrant**.
-
-10. In the mgmt virtual machine **inside the gcpcloud folder**, run:
+8.   In the mgmt virtual machine, **still inside the gcp folder**, run:
 
 ```
 terraform init
-terraform plan
 terraform apply
 ```
 
-To check the configurations, you can then run:
 
-```
-terraform output
-ansible all -m ping
-```
-
-11. Finally, after checking that configuration is working as intended, **in the same folder in the VM**, run:
+9.   Finally, **in the same folder in the VM**, run:
 
 ```
 ansible-playbook ansible-gcp-servers-setup-all.yml
 ```
 
+10.   At this point, the project is fully set up and provisioned. To view the application frontend in your browser, check the **inventory** file, which should appear in the **gcp** folder after running **terraform apply**.
+
+Your inventory file will look something like this, but note that **the IPs, after "ansible_host=", will be different**.
+![image of inventory file](./assets/inventory.png)
+
+Here, you should open the IP address provided for **"balancer 1"** to view the frontend in your browser. 
+
+11. To view the Grafana dashboard, enter the IP for **monitor** from the **inventory** file, with the port number **:3000**. 
+
+The site has no password, so the credentials for both fields is just "admin". This should lead you to the Grafana landing page. Open the hamburger meny in the top left corner, click **"Dashboards"** and navigate to the dashboard named **"todo_service_dashboard"**.
+
 ### Finishing and Cleaning Up
 
-When finished running, **Stop Terraform**, and **Stop the Virtual Machines**. 
-Stop Terraform using the following command: 
+When finished running the project, **Stop Terraform**, and **Stop the Virtual Machines**. 
+
+Stop and verify the state for Terraform using the following commands: 
 
 ```
 terraform destroy
