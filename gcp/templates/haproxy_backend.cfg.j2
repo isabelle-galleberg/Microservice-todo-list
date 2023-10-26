@@ -41,21 +41,32 @@ defaults
 #---------------------------------------------------------------------
 # FrontEnd Configuration
 #---------------------------------------------------------------------
-frontend hafrontend
-  bind *:80
+frontend halist
+  bind *:2600
   mode http
-  default_backend multiplier
+  default_backend backendlist
+
+frontend haitem
+  bind *:2601
+  mode http
+  default_backend backenditem
 
 #---------------------------------------------------------------------
-# BackEnd roundrobin as balance algorithm
+# BackEnd Configuration
 #---------------------------------------------------------------------
-backend multiplier
+backend backendlist
+  mode http
+  balance roundrobin
+  {% for host in groups['list'] %}
+    server {{ host }} {{ hostvars[host]['ansible_default_ipv4']['address'] }}:3000 check
+  {% endfor %}
+
+backend backenditem
   mode http
   balance roundrobin
   {% for host in groups['item'] %}
     server {{ host }} {{ hostvars[host]['ansible_default_ipv4']['address'] }}:3000 check
   {% endfor %}
-
 #---------------------------------------------------------------------
 # HAProxy Monitoring Config URI
 #---------------------------------------------------------------------
