@@ -1,4 +1,4 @@
-# 2.1: itemservice
+# Update itemservice
 - hosts: item
   gather_facts: false
   remote_user: ubuntu
@@ -15,7 +15,7 @@
         - /home/vagrant/project/microservices/itemservice/routes
         - /home/vagrant/project/microservices/itemservice/app.js
 
-# 2.2: listservice
+# Update listservice
 - hosts: list
   gather_facts: false
   remote_user: ubuntu
@@ -32,7 +32,7 @@
         - /home/vagrant/project/microservices/listservice/routes
         - /home/vagrant/project/microservices/listservice/app.js
 
-# 2.3: frontend
+# Update frontend
 - hosts: frontend
   gather_facts: false
   remote_user: ubuntu
