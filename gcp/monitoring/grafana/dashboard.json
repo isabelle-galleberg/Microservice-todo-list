@@ -193,7 +193,7 @@
 			],
 			"title": "Memory Utilization",
 			"type": "timeseries"
-		},
+		}
 	],
 	"refresh": "5s",
 	"schemaVersion": 37,
