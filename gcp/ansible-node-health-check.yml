@@ -1,0 +1,21 @@
+---
+- name: Check and Restart item microservice
+  hosts:
+    - item
+    - list
+    - frontend
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Check if Node.js service is running
+      shell: 'ps aux | grep -v grep | grep -v node_exporter | grep node'
+      ignore_errors: yes
+      register: service_status
+
+    - name: Restart Node.js service
+      command:
+        chdir: /home/ubuntu/src/
+        cmd: npm start
+      async: 1000
+      poll: 0
+      when: service_status.rc != 0
