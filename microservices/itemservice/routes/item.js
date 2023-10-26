@@ -9,14 +9,17 @@ const Prometheus = require('prom-client');
 const errorCounter = new Prometheus.Counter({
   name: 'service_errors_total',
   help: 'Total number of errors occurred in the service',
-  labelNames: ['service', 'endpoint', 'error_type']
+  labelNames: ['service', 'endpoint', 'error_type'],
 });
 
 // Register the metric with Prometheus
 Prometheus.register.registerMetric(errorCounter);
 
 // Initialize the counter with a default value of 0 for specific labels
-errorCounter.inc({ service: "listService", endpoint: "/todos", error_type: "FetchError" }, 0);
+errorCounter.inc(
+  { service: 'listService', endpoint: '/todos', error_type: 'FetchError' },
+  0
+);
 
 // Get database connection string
 function getMongoDBurl() {
@@ -30,7 +33,10 @@ function getMongoDBurl() {
 
 const url = getMongoDBurl();
 
-
+// Health check for balancing purposes
+router.get('/health', (req, res) => {
+  res.end();
+});
 
 // Toggle an item (check/uncheck depending on state)
 router.put('/toggle/:id', async (req, res) => {
@@ -46,7 +52,11 @@ router.put('/toggle/:id', async (req, res) => {
       res.status(200).json({ status: message, result });
     } catch (error) {
       console.error('Error toggling item:', error);
-      errorCounter.inc({ service: 'itemService', endpoint: '/toggle', error_type: 'ToggleError' });
+      errorCounter.inc({
+        service: 'itemService',
+        endpoint: '/toggle',
+        error_type: 'ToggleError',
+      });
       res.status(500).json({ error: 'Failed to toggle the item' });
     }
   } else {
@@ -73,7 +83,11 @@ async function updateItemStatus(itemId, status) {
     }
   } catch (error) {
     console.error('Error updating item status:', error);
-    errorCounter.inc({ service: 'itemService', endpoint: '/updateItemStatus', error_type: 'UpdateStatusError' });
+    errorCounter.inc({
+      service: 'itemService',
+      endpoint: '/updateItemStatus',
+      error_type: 'UpdateStatusError',
+    });
   } finally {
     client.close();
   }
