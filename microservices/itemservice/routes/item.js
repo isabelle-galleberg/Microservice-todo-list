@@ -12,6 +12,9 @@ const errorCounter = new Prometheus.Counter({
   labelNames: ['service', 'endpoint', 'error_type']
 });
 
+// Register the metric with Prometheus
+Prometheus.register.registerMetric(errorCounter);
+
 // Get database connection string
 function getMongoDBurl() {
   const data = fs.readFileSync('database_ips', 'utf8'); //! Requires the file database_ips to be set up with ips of our mongodb servers
